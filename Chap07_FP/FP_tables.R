@@ -14,11 +14,12 @@ IRdata <- IRdata %>%
 expss_digits(digits=1)
 
 # create list of current use of family planning variables
-fp_cruse_list <- IRdata %>% list(fp_cruse_any, fp_cruse_mod, fp_cruse_fster, fp_cruse_mster, 
+fp_cruse_list <- IRdata %>%  select(fp_cruse_any, fp_cruse_mod, fp_cruse_fster, fp_cruse_mster, 
                 fp_cruse_pill, fp_cruse_iud, fp_cruse_inj, fp_cruse_imp, 
                 fp_cruse_mcond, fp_cruse_fcond, fp_cruse_diaph, fp_cruse_lam, 
                 fp_cruse_ec, fp_cruse_omod, fp_cruse_trad, fp_cruse_rhy, 
-                fp_cruse_wthd, fp_cruse_other)
+                fp_cruse_wthd, fp_cruse_other) %>%
+  as.list()
 
 # create population groups that are shown in tables
 
@@ -40,7 +41,7 @@ sauw = set_label(fp_sauw, label = "sexally active, unmarried women"))
 
 # table: FP knowledge of any method, any modern method, any traditional method
 table_temp <-  IRdata %>% 
-  calc_cro_cpct(
+  cross_cpct(
     cell_vars = list(fp_know_any,   fp_know_mod,   fp_know_fster,   fp_know_mster, 
                      fp_know_pill, fp_know_iud,   fp_know_inj,     fp_know_imp, 
                      fp_know_mcond, fp_know_fcond,  fp_know_ec,  fp_know_sdm,  fp_know_lam, 
@@ -50,12 +51,12 @@ table_temp <-  IRdata %>%
     expss_digits(digits=1)) %>%   
   set_caption("Knowledge of family planning methods")
 
-write.xlsx(table_temp, "Tables_FP_WM.xlsx", sheetName = "use")
+write.xlsx(table_temp, "Tables_FP_WM.xlsx", sheetName = "use_1")
 
 
 # table: FP knowledge of any method, any modern method, any traditional method by background variables
 table_temp <-  IRdata %>% 
-  calc_cro_rpct(
+  cross_rpct(
     cell_vars = list(v013, v025, v024, v106, v190),
     col_vars = list(fp_know_any,   fp_know_mod, total()),
     weight = wt,
@@ -64,7 +65,7 @@ table_temp <-  IRdata %>%
     expss_digits(digits=1)) %>%   
   set_caption("Knowledge of family planning methods")
 
-write.xlsx(table_temp, "Tables_FP_WM.xlsx", sheetName = "use")
+write.xlsx(table_temp, "Tables_FP_WM.xlsx", sheetName = "use_2", append = TRUE)
 
 
 
@@ -81,7 +82,7 @@ write.xlsx(table_temp, "Tables_FP_WM.xlsx", sheetName = "use")
 
 # table: current use by age
 table_temp <-  IRdata %>% 
-  calc_cro_rpct(
+  cross_rpct(
     cell_vars = v013,
     col_vars = list(total(),fp_cruse_any, fp_cruse_mod, fp_cruse_fster, fp_cruse_mster, 
                     fp_cruse_pill, fp_cruse_iud, fp_cruse_inj, fp_cruse_imp, 
@@ -94,13 +95,13 @@ table_temp <-  IRdata %>%
     total_row_position = c("below")) %>%  
   set_caption("Current use by age, all women")
 
-write.xlsx(table_temp, "Tables_FP_WM.xlsx", sheetName = "use",append=TRUE)
+write.xlsx(table_temp, "Tables_FP_WM.xlsx", sheetName = "use_3", append = TRUE)
 
 
 # create table of current use by age, currently married
 table_temp <-  IRdata %>% 
   filter(v502==1) %>%
-    calc_cro_rpct(
+    cross_rpct(
     cell_vars = v013,
     col_vars = list(total(),fp_cruse_any, fp_cruse_mod, fp_cruse_fster, fp_cruse_mster, 
                     fp_cruse_pill, fp_cruse_iud, fp_cruse_inj, fp_cruse_imp, 
@@ -110,13 +111,13 @@ table_temp <-  IRdata %>%
     weight = wt) %>% 
       set_caption("Current use by age, currently married women")
 
-write.xlsx(table_temp, "Tables_FP_WM.xlsx", sheetName = "use",append=TRUE)
+write.xlsx(table_temp, "Tables_FP_WM.xlsx", sheetName = "use_4", append = TRUE)
 
 
 # create table of current use by number of living children, sexually active, unmarried women
 table_temp <-  IRdata %>% 
   filter(v502!=1 & v528<=30) %>%
-    calc_cro_rpct(
+    cross_rpct(
     cell_vars = v201,
     col_vars = list(total(),fp_cruse_any, fp_cruse_mod, fp_cruse_fster,
                     fp_cruse_mster, fp_cruse_pill, fp_cruse_iud, fp_cruse_inj,
@@ -126,14 +127,14 @@ table_temp <-  IRdata %>%
     weight = wt) %>% 
   set_caption("Current use by age, sexually active, unmarried women")
   
-write.xlsx(table_temp, "Tables_FP_WM.xlsx", sheetName = "use",append=TRUE)
+write.xlsx(table_temp, "Tables_FP_WM.xlsx", sheetName = "use_5", append = TRUE)
 
 
 # create table of current use by age, sexually active, unmarried women
 table_temp <-  IRdata %>% 
   filter(v502==1) %>%
-    calc_cro_rpct(
-      cell_vars = v024, v025, v106, v190,
+    cross_rpct(
+      cell_vars = list(v024, v025, v106, v190),
       col_vars = list(total(),fp_cruse_any, fp_cruse_mod, fp_cruse_fster,
                       fp_cruse_mster, fp_cruse_pill, fp_cruse_iud, fp_cruse_inj,
                       fp_cruse_imp, fp_cruse_mcond, fp_cruse_fcond, fp_cruse_diaph,

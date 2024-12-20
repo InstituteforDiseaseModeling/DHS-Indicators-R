@@ -32,12 +32,12 @@ library(sjmisc)
 #library(janitor)
 #library(survey)  #to create survey design weights
 
-datapath <- "C:/Users/21180/OneDrive - ICF/Data/DHS_Stata"
-irdata <- "UGIR7BFL"
-srvy <- substr(irdata,1,6)
-
-# read data for now (this will happen in main file, just using code here for temp)
-IRdata <- read_dta(paste(datapath,"/",irdata,".dta",sep=""))
+# datapath <- "C:/Users/21180/OneDrive - ICF/Data/DHS_Stata"
+# irdata <- "UGIR7BFL"
+# srvy <- substr(irdata,1,6)
+# 
+# # read data for now (this will happen in main file, just using code here for temp)
+# IRdata <- read_dta(paste(datapath,"/",irdata,".dta",sep=""))
 
 v626a_included <- (hasName(IRdata,"v626a") & sum(is.na(IRdata$v626a)) == 0)
 
