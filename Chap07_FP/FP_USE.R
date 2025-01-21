@@ -77,7 +77,8 @@
 # Family planning messages by radio 
 IRdata <- IRdata %>%
   mutate(fp_evuse_any = 
-           ifelse(v302 > 0  & v302 < 8, 1, 0)) %>%  
+           ifelse(!is.na(v302) & v302 > 0 & v302 < 8, 1, 0)) %>% 
+  mutate(fp_evuse_any = as.numeric(fp_evuse_any)) %>% #handle all NAs
   set_value_labels(fp_evuse_any = c(yes = 1, no = 0)) %>%
   set_variable_labels(fp_evuse_any = "Ever used any contraceptive method")
 
@@ -85,7 +86,8 @@ IRdata <- IRdata %>%
 # Ever use modern method
 IRdata <- IRdata %>%
   mutate(fp_evuse_mod = 
-           ifelse(v302 == 3, 1, 0)) %>%   
+           ifelse(!is.na(v302) & v302 == 3, 1, 0)) %>%  
+  mutate(fp_evuse_mod  = as.numeric(fp_evuse_mod)) %>%
   set_value_labels(fp_evuse_mod = c(yes = 1, no = 0)) %>%
   set_variable_labels(fp_evuse_mod =  "Ever used any modern method")
 
@@ -93,7 +95,8 @@ IRdata <- IRdata %>%
 # Ever use female sterilization  
 IRdata <- IRdata %>%
   mutate(fp_evuse_fster = 
-           ifelse(v305_06 > 0 & v305_06 < 8, 1, 0)) %>%
+           ifelse(!is.na(v305_06) & v305_06 > 0 & v305_06 < 8, 1, 0)) %>%
+  mutate(fp_evuse_fster  = as.numeric(fp_evuse_fster)) %>%
   set_value_labels(fp_evuse_fster = c(yes = 1, no = 0)) %>%
   set_variable_labels(fp_evuse_fster = "Ever used female sterilization")
 
@@ -101,7 +104,8 @@ IRdata <- IRdata %>%
 # Ever use male sterilization  
 IRdata <- IRdata %>%
   mutate(fp_evuse_mster = 
-           ifelse(v305_07 > 0 & v305_07 < 8, 1, 0)) %>%  
+           ifelse(!is.na(v305_07) & v305_07 > 0 & v305_07 < 8, 1, 0)) %>%  
+  mutate(fp_evuse_mster  = as.numeric(fp_evuse_mster)) %>%
   set_value_labels(fp_evuse_mster = c(yes = 1, no = 0)) %>%
   set_variable_labels(fp_evuse_mster = "Ever used male sterilization")
 
@@ -109,7 +113,8 @@ IRdata <- IRdata %>%
 # Ever use the contraceptive pill  
 IRdata <- IRdata %>%
   mutate(fp_evuse_pill = 
-           ifelse(v305_01 > 0 & v305_01 < 8, 1, 0)) %>%   
+           ifelse(!is.na(v305_01) & v305_01 > 0 & v305_01 < 8, 1, 0)) %>% 
+  mutate(fp_evuse_pill  = as.numeric(fp_evuse_pill)) %>%
   set_value_labels(fp_evuse_pill = c(yes = 1, no = 0)) %>%
   set_variable_labels(fp_evuse_pill = "Ever used pill")
 
@@ -117,7 +122,8 @@ IRdata <- IRdata %>%
 # Ever use Interuterine contraceptive device (IUD)
 IRdata <- IRdata %>%
   mutate(fp_evuse_iud = 
-           ifelse(v305_02 > 0 & v305_02 < 8, 1, 0)) %>%   
+           ifelse(!is.na(v305_02) & v305_02 > 0 & v305_02 < 8, 1, 0)) %>%
+  mutate(fp_evuse_iud  = as.numeric(fp_evuse_iud)) %>%
   set_value_labels(fp_evuse_iud = c(yes = 1, no = 0)) %>%
   set_variable_labels(fp_evuse_iud = "Ever used IUD")
 
@@ -125,7 +131,8 @@ IRdata <- IRdata %>%
 # Ever use injectables (Depo-Provera) 
 IRdata <- IRdata %>%
   mutate(fp_evuse_inj = 
-           ifelse(v305_03 > 0 & v305_03 < 8, 1, 0)) %>%   
+           ifelse(!is.na(v305_03) & v305_03 > 0 & v305_03 < 8, 1, 0)) %>%  
+  mutate(fp_evuse_inj  = as.numeric(fp_evuse_inj)) %>%
   set_value_labels(fp_evuse_inj = c(yes = 1, no = 0)) %>%
   set_variable_labels(fp_evuse_inj = "Ever used injectables")
 
@@ -133,7 +140,8 @@ IRdata <- IRdata %>%
 # Ever use implants (Norplant)  
 IRdata <- IRdata %>%
   mutate(fp_evuse_imp = 
-           ifelse(v305_11 > 0 & v305_11 < 8, 1, 0)) %>%  
+           ifelse(!is.na(v305_11) & v305_11 > 0 & v305_11 < 8, 1, 0)) %>%  
+  mutate(fp_evuse_imp  = as.numeric(fp_evuse_imp)) %>%
   set_value_labels(fp_evuse_imp = c(yes = 1, no = 0)) %>%
   set_variable_labels(fp_evuse_imp =  "Ever used implants")
 
@@ -141,7 +149,8 @@ IRdata <- IRdata %>%
 # Ever use male condoms  
 IRdata <- IRdata %>%
   mutate(fp_evuse_mcond = 
-           ifelse(v305_05 > 0 & v305_05 < 8, 1, 0)) %>%   
+           ifelse(!is.na(v305_05) & v305_05 > 0 & v305_05 < 8, 1, 0)) %>% 
+  mutate(fp_evuse_mcond  = as.numeric(fp_evuse_mcond)) %>%
   set_value_labels(fp_evuse_mcond = c(yes = 1, no = 0)) %>%
            set_variable_labels(fp_evuse_mcond = "Ever used male condoms")
 
@@ -149,7 +158,8 @@ IRdata <- IRdata %>%
 # Ever use female condoms 
 IRdata <- IRdata %>%
   mutate(fp_evuse_fcond = 
-           ifelse(v305_14 > 0 & v305_14 < 8, 1, 0)) %>%   
+           ifelse(!is.na(v305_14) & v305_14 > 0 & v305_14 < 8, 1, 0)) %>% 
+  mutate(fp_evuse_fcond  = as.numeric(fp_evuse_fcond)) %>%
   set_value_labels(fp_evuse_fcond = c(yes = 1, no = 0)) %>%
   set_variable_labels(fp_evuse_fcond =  "Ever used female condoms")
 
@@ -157,7 +167,8 @@ IRdata <- IRdata %>%
 # Ever use diaphragm  
 IRdata <- IRdata %>%
   mutate(fp_evuse_diaph = 
-           ifelse(v305_04 > 0 & v305_04 < 8, 1, 0)) %>%   
+           ifelse(!is.na(v305_04) & v305_04 > 0 & v305_04 < 8, 1, 0)) %>% 
+  mutate(fp_evuse_diaph  = as.numeric(fp_evuse_diaph)) %>%
   set_value_labels(fp_evuse_diaph = c(yes = 1, no = 0)) %>%
   set_variable_labels(fp_evuse_diaph =  "Ever used diaphragm")
 
@@ -165,7 +176,8 @@ IRdata <- IRdata %>%
 # Ever use standard days method (SDM) 
 IRdata <- IRdata %>%
   mutate(fp_evuse_sdm = 
-           ifelse(v305_18 > 0 & v305_18 < 8, 1, 0)) %>%   
+           ifelse(!is.na(v305_18) & v305_18 > 0 & v305_18 < 8, 1, 0)) %>% 
+  mutate(fp_evuse_sdm  = as.numeric(fp_evuse_sdm)) %>%
   set_value_labels(fp_evuse_sdm = c(yes = 1, no = 0)) %>%
   set_variable_labels(fp_evuse_sdm = "Ever used standard days method")
 
@@ -173,7 +185,8 @@ IRdata <- IRdata %>%
 # Ever use Lactational amenorrhea method (LAM) 
 IRdata <- IRdata %>%
   mutate(fp_evuse_lam = 
-           ifelse(v305_13 > 0 & v305_13 < 8, 1, 0)) %>%   
+           ifelse(!is.na(v305_13) & v305_13 > 0 & v305_13 < 8, 1, 0)) %>%   
+  mutate(fp_evuse_lam  = as.numeric(fp_evuse_lam)) %>%
   set_value_labels(fp_evuse_lam = c(yes = 1, no = 0)) %>%
   set_variable_labels(fp_evuse_lam =  "Ever used LAM")
 
@@ -181,7 +194,8 @@ IRdata <- IRdata %>%
 ## Ever use emergency contraception  
 IRdata <- IRdata %>%
   mutate(fp_evuse_ec = 
-           ifelse(v305_16 > 0 & v305_16 < 8, 1, 0)) %>%   
+           ifelse(!is.na(v305_16) & v305_16 > 0 & v305_16 < 8, 1, 0)) %>%   
+  mutate(fp_evuse_ec  = as.numeric(fp_evuse_ec)) %>%
   set_value_labels(fp_evuse_ec = c(yes = 1, no = 0)) %>%
   set_variable_labels(fp_evuse_ec = "Ever used emergency contraception")
 
@@ -189,7 +203,8 @@ IRdata <- IRdata %>%
 # Ever use country-specific modern methods and other modern contraceptive methods 
 IRdata <- IRdata %>%
   mutate(fp_evuse_omod = 
-           ifelse(v305_17 > 0 & v305_17 < 8, 1, 0)) %>%   
+           ifelse(!is.na(v305_17) & v305_17 > 0 & v305_17 < 8, 1, 0)) %>%   
+  mutate(fp_evuse_omod  = as.numeric(fp_evuse_omod)) %>%
   set_value_labels(fp_evuse_omod = c(yes = 1, no = 0)) %>%
 set_variable_labels(fp_evuse_omod = "Ever used other modern method")
 
@@ -197,15 +212,17 @@ set_variable_labels(fp_evuse_omod = "Ever used other modern method")
 # Ever use periodic abstinence (rhythm, calendar method) 
 IRdata <- IRdata %>%
   mutate(fp_evuse_rhy = 
-           ifelse(v305_08 > 0 & v305_08 < 8, 1, 0)) %>%   
-  set_value_labels(fp_evuse_any = c(yes = 1, no = 0)) %>%
+           ifelse(!is.na(v305_08) & v305_08 > 0 & v305_08 < 8, 1, 0)) %>%
+  mutate(fp_evuse_rhy  = as.numeric(fp_evuse_rhy)) %>%
+  set_value_labels(fp_evuse_rhy = c(yes = 1, no = 0)) %>%
   set_variable_labels(fp_evuse_rhy = "Ever used rhythm method")
 
 
 # Ever use withdrawal  
 IRdata <- IRdata %>%
   mutate(fp_evuse_wthd = 
-           ifelse(v305_09 > 0 & v305_09 < 8, 1, 0)) %>%   
+           ifelse(!is.na(v305_09) & v305_09 > 0 & v305_09 < 8, 1, 0)) %>% 
+  mutate(fp_evuse_wthd  = as.numeric(fp_evuse_wthd)) %>%
   set_value_labels(fp_evuse_wthd = c(yes = 1, no = 0)) %>%
   set_variable_labels(fp_evuse_wthd =  "Ever used withdrawal method")
 
@@ -213,7 +230,8 @@ IRdata <- IRdata %>%
 # Ever use country-specific traditional methods, and folk methods 
 IRdata <- IRdata %>%
   mutate(fp_evuse_other = 
-           ifelse(v305_10 > 0 & v305_10 < 8, 1, 0)) %>%   
+           ifelse(!is.na(v305_10) & v305_10 > 0 & v305_10 < 8, 1, 0)) %>%  
+  mutate(fp_evuse_other  = as.numeric(fp_evuse_other)) %>%
   set_value_labels(fp_evuse_other = c(yes = 1, no = 0)) %>%
   set_variable_labels(fp_evuse_other =  "Ever used other method")
 
@@ -378,7 +396,7 @@ v320labels <- val_labels(IRdata$v320)
 IRdata <- IRdata %>%
   mutate(fp_ster_age = 
            ifelse(v312 == 6, v320, NA)) %>%
-  set_value_labels(fp_ster_age = val_labels(IRdata$v320)) %>%
+  set_value_labels(fp_ster_age = get_value_labels(IRdata$v320)) %>%
   set_variable_labels(fp_ster_age = "Age at time of sterilization for women")
 
 
@@ -430,7 +448,7 @@ IRdata <- IRdata %>%
 IRdata <- IRdata %>%
   mutate(fp_source_fster = 
            ifelse(v312==6, v326, NA)) %>%
-  set_value_labels(fp_source_fster = val_labels(IRdata$v326)) %>%
+  set_value_labels(fp_source_fster = get_value_labels(IRdata$v326)) %>%
   set_variable_labels(fp_source_fster = "Source for female sterilization")
 
 
@@ -438,7 +456,7 @@ IRdata <- IRdata %>%
 IRdata <- IRdata %>%
   mutate(fp_source_pill = 
            ifelse(v312==1, v326, NA)) %>%
-  set_value_labels(fp_source_pill = val_labels(IRdata$v326)) %>%
+  set_value_labels(fp_source_pill = get_value_labels(IRdata$v326)) %>%
   set_variable_labels(fp_source_pill = "Source for pill")
 
 
@@ -446,7 +464,7 @@ IRdata <- IRdata %>%
 IRdata <- IRdata %>%
   mutate(fp_source_iud = 
          ifelse(v312==2, v326, NA)) %>%
-  set_value_labels(fp_source_iud = val_labels(IRdata$v326)) %>%
+  set_value_labels(fp_source_iud = get_value_labels(IRdata$v326)) %>%
   set_variable_labels(fp_source_iud = "Source for IUD")
 
 
@@ -454,7 +472,7 @@ IRdata <- IRdata %>%
 IRdata <- IRdata %>%
   mutate(fp_source_inj = 
            ifelse(v312==3, v326, NA)) %>%
-  set_value_labels(fp_source_inj = val_labels(IRdata$v326)) %>%
+  set_value_labels(fp_source_inj = get_value_labels(IRdata$v326)) %>%
   set_variable_labels(fp_source_inj = "Source for injectables")
 
 
@@ -462,7 +480,7 @@ IRdata <- IRdata %>%
 IRdata <- IRdata %>%
   mutate(fp_source_imp = 
            ifelse(v312==11, v326, NA)) %>%
-  set_value_labels(fp_source_imp = val_labels(IRdata$v326)) %>%
+  set_value_labels(fp_source_imp = get_value_labels(IRdata$v326)) %>%
   set_variable_labels(fp_source_imp = "Source for implants")
 
 
@@ -470,7 +488,7 @@ IRdata <- IRdata %>%
 IRdata <- IRdata %>%
   mutate(fp_source_mcond = 
            ifelse(v312==5, v326, NA)) %>%
-  set_value_labels(fp_source_mcond = val_labels(IRdata$v326)) %>%
+  set_value_labels(fp_source_mcond = get_value_labels(IRdata$v326)) %>%
   set_variable_labels(fp_source_mcond = "Source for male condom")
 
 
@@ -491,7 +509,7 @@ IRdata <- IRdata %>%
              v312 == 1 ~ v323,
              v323 < 96 ~ v323)
            ) %>%
-  set_value_labels(fp_brand_pill = val_labels(IRdata$v323)) %>%
+  set_value_labels(fp_brand_pill = get_value_labels(IRdata$v323)) %>%
   set_variable_labels(fp_brand_pill = "Pill users using a social marketing brand")
 
 
@@ -502,7 +520,7 @@ IRdata <- IRdata %>%
              v312 == 5 ~ v323a,
              v323a < 96 ~ v323a
            )) %>% 
-  set_value_labels(fp_source_mcond = val_labels(IRdata$v323a)) %>%
+  set_value_labels(fp_source_mcond = get_value_labels(IRdata$v323a)) %>%
   set_variable_labels(fp_brand_cond =  "Male condom users using a social marketing brand")
 
 
