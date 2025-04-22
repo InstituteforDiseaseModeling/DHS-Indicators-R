@@ -1,0 +1,75 @@
+# ******************************************************************************
+# Program: 			  FP_microtables.R
+# Purpose: 		    Process and export microdata with all indicators 
+# Data outputs:		DTA files with all indicators at individual level
+# Note: 				  Uses utility functions from write_micro.R
+# ******************************************************************************
+#
+
+# Source the utility functions
+source(here("utils/write_micro.R"))
+
+# Function to derive output filename based on input filename
+get_output_filename <- function(input_filename, output_dir = NULL) {
+  # Extract base filename without extension
+  base_name <- tools::file_path_sans_ext(basename(input_filename))
+  # Add _micro suffix
+  new_name <- paste0(base_name, "_micro.dta")
+  # Add output directory if provided
+  if (!is.null(output_dir)) {
+    new_name <- file.path(output_dir, new_name)
+  }
+  return(new_name)
+}
+
+# Process and export IRdata if it exists
+if (exists("IRdata")) {
+  message("Processing IRdata for micro export...")
+  
+  # Apply weights for consistency (same as in FP_tables.R)
+  IRdata <- IRdata %>%
+    mutate(wt = v005/1000000)
+  
+  # Create standard population groups as done in FP_tables.R
+  # This helps maintain consistency between tables and micro data
+  
+  # dummy var for all women
+  IRdata <- IRdata %>% mutate(fp_all = case_when(
+    v007>0  ~ "all"),
+    fp_all = set_label(fp_all, label = "all women"))
+  
+  # only married women
+  IRdata <- IRdata %>% mutate(fp_married = case_when(
+    v502==1  ~ "married"),
+    fp_married = set_label(fp_married, label = "currently married women"))
+  
+  # sexually active unmarried women (SAUW); sexually active if had sex in last 30 days
+  IRdata <- IRdata %>% mutate(fp_sauw = case_when(
+    v502!=1 & v528<=30 ~ "SAUW"),
+    fp_sauw = set_label(fp_sauw, label = "sexually active, unmarried women"))
+  
+  # Use the utility function to write/append IR data
+  write_dta_micro(IRdata, opt$ir, opt$`output-dir`, chapter_tag = "Chap07_FP")
+}
+
+# Process and export MRdata if it exists
+if (exists("MRdata")) {
+  message("Processing MRdata for micro export...")
+  
+  # Apply weights (same pattern as IRdata)
+  MRdata <- MRdata %>%
+    mutate(wt = mv005/1000000)
+  
+  # Create any MR-specific population groups if needed
+  # This follows similar patterns as in IRdata but with MR variables
+  
+  # Filter for men in union/married if needed
+  MRdata <- MRdata %>% mutate(fp_married = case_when(
+    mv502==1  ~ "married"),
+    fp_married = set_label(fp_married, label = "currently married men"))
+  
+  # Use the utility function to write/append MR data
+  write_dta_micro(MRdata, opt$mr, opt$`output-dir`, chapter_tag = "Chap07_FP")
+}
+
+message("Micro data export complete!") 
