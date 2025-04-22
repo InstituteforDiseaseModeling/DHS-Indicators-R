@@ -100,7 +100,7 @@ if (exists("IRdata")) {
   # Discussed with FP worker
   IRdata <- IRdata %>%
     mutate(fp_fpvisit_discuss = NA_real_)
-  if (all(c("v312","v393a")) %in% colnames(IRdata)) {
+  if (all(c("v312","v393a") %in% colnames(IRdata))) {
     IRdata <- IRdata %>%
       mutate(fp_fpvisit_discuss = 
                case_when(
@@ -206,7 +206,7 @@ if (exists("MRdata")) {
   # Did not hear a family planning message from any of the 4 media sources
   MRdata <- MRdata %>%
     mutate(fp_message_noneof4 = as.numeric(
-             ifelse(!all(c("mv384a", "mv384b", "mv384c", "mv384d")) %in% colnames(IRdata), NA, ifelse(mv384a!=1 & mv384b!=1 & mv384c!=1 & mv384d!=1, 1, 0)))) %>%
+             ifelse(!all(c("mv384a", "mv384b", "mv384c", "mv384d") %in% colnames(IRdata)), NA, ifelse(mv384a!=1 & mv384b!=1 & mv384c!=1 & mv384d!=1, 1, 0)))) %>%
     set_value_labels(fp_message_noneof4 = c(yes = 1, no = 0)) %>%
     set_variable_labels(fp_message_noneof4 = "Exposure to family planning message any of four sources (TV, radio, paper, mobile)")
   

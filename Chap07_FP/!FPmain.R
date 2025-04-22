@@ -31,11 +31,11 @@ chap <- "Chap07_FP"
 ## select your survey
 
 # IR Files
-IRdatafile <- "NGIR7BFL.dta"
+IRdatafile <- "UGIR7BFL.dta"
 # example of file names: MMIR71FL TJIR70FL GHIR72FL UGIR7BFL
 
 # MR Files
-MRdatafile <- "NGMR7AFL.dta"
+MRdatafile <- "UGMR7BFL.dta"
 # example of file names: MMR71FL TJMR70FL GHMR72FL UGMR7BFL
 # *******************************************************************************************************************************
 
@@ -64,10 +64,10 @@ source(here(paste0(chap,"/FP_COMM.R")))
 source(here(paste0(chap,"/FP_tables.R")))
 
 # script to create an event file where the episode of contraceptive use is the unit of analysis.
-# source(here(paste0(chap,"/FP_EVENTS.R")))
+source(here(paste0(chap,"/FP_EVENTS.R")))
 
 # script for discontinuation variables (discontinuation rates and reasons for discontinuation) and create discontinuation tables
-# source(here(paste0(chap,"/FP_DISCONT.R")))
+source(here(paste0(chap,"/FP_DISCONT.R")))
 
 # note: This script will create the discontinuation results table Tables_Discont_12m.xlsx and an .RDS file, eventsfile.rds for the survey. 
 
@@ -85,8 +85,7 @@ source(here(paste0(chap,"/FP_KNOW.R")))
 # script for communication related indicators: exposure to FP messages indicators only for men. 
 source(here(paste0(chap,"/FP_COMM.R")))
 
-# There is no MRdata used in FP_tables.R
 # script to produce tables for indicators computed from above R scripts. 
-# source(here(paste0(chap,"/FP_tables.R")))
+source(here(paste0(chap,"/FP_tables.R")))
 
 # *******************************************************************************************************************************
