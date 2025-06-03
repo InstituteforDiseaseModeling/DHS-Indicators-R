@@ -28,7 +28,8 @@ option_list <- list(
   make_option("--tenant", type="character", help="Azure tenant ID (optional, will use Azure CLI credentials if not provided)", default="296b3838-4bd5-496c-bd4b-f456ea743b74"),
   make_option("--refresh", type="logical", default=FALSE, help="Force refresh of Azure token"),
   make_option("--dry-run", type="logical", default=TRUE, help="Only print commands without executing them"),
-  make_option("--config", type="character", default="config/config.R", help="Path to the configuration file")
+  make_option("--config", type="character", default="config/config.R", help="Path to the configuration file"),
+  make_option("--country", type="character", default=NULL, help="Only process the specified country file prefix (e.g., 'NG')")
 )
 
 opt <- parse_args(OptionParser(option_list=option_list))
@@ -37,7 +38,17 @@ opt <- parse_args(OptionParser(option_list=option_list))
 opt$`dry-run` <- as.logical(opt$`dry-run`)
 
 # Countries supported
+
+# Countries supported
 countries <- read.csv("countries.csv", stringsAsFactors = FALSE)
+# Filter to a specific country if --country is provided
+if (!is.null(opt$country) && nzchar(opt$country)) {
+  message(sprintf("Filtering to country: %s", opt$country))
+  countries <- countries[countries$file_prefix == opt$country, ]
+  if (nrow(countries) == 0) {
+    stop(sprintf("No country with file_prefix '%s' found in countries.csv", opt$country))
+  }
+}
 
 # Load configuration based on the provided parameter
 config_file <- opt$config
