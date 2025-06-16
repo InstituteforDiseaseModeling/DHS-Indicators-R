@@ -16,7 +16,6 @@ suppressPackageStartupMessages({
   library(haven)
   library(labelled)
   library(expss)
-  library(xlsx)
   library(here)
   library(optparse)
 })
@@ -90,15 +89,39 @@ on.exit({
 
 # Validate inputs
 if (!is.null(opt$ir) || !is.null(opt$mr)) {
+  # Ensure all required columns exist in IRdata and MRdata
+  req_cols <- read.csv(here( "required_col.csv"), stringsAsFactors = FALSE)
   if (!is.null(opt$ir)) {
     message("Processing IR file: ", opt$ir)
     IRdata <- read_dta(opt$ir)
+    ir_cols <- req_cols$col_name[req_cols$survey_type == "ir"]
+    for (col in ir_cols) {
+      if (!col %in% colnames(IRdata)) {
+        IRdata[[col]] <- NA
+      }
+    }
     # Run IR analysis scripts
     source(here(paste0(chap,"/FP_KNOW.R")))
     source(here(paste0(chap,"/FP_USE.R")))
     source(here(paste0(chap,"/FP_NEED.R")))
     source(here(paste0(chap,"/FP_COMM.R")))
+    
+    # Run IR analysis scripts
+    result <- CREATE_FP_KNOW(IRdata=IRdata, MRdata=NULL)
+    message("Processed IRdata for FP_KNOW...")
+    result <- CREATE_FP_COMM(IRdata=result$IRdata, MRdata=NULL)
+    message("Processed IRdata for FP_COMM...")
+    IRdata <- CREATE_FP_USE(IRdata=result$IRdata)
+    message("Processed IRdata for FP_USE...")
+    IRdata <- CREATE_FP_NEED(IRdata=IRdata)
+    message("Processed IRdata for FP_Need...")
+    
     source(here(paste0(chap,"/FP_microtables.R")))
+    write_micro_variables(IRdata=IRdata, 
+                          MRdata=MRdata, 
+                          source_filename_ir=opt$ir,
+                          source_filename_mr=opt$mr,
+                          output_dir=opt$`output-dir`)
 
   # Optional analyses
   if (!opt$`skip-events`) {
@@ -114,9 +137,18 @@ if (!is.null(opt$ir) || !is.null(opt$mr)) {
   if (!is.null(opt$mr)) {
     message("Processing MR file: ", opt$mr)
     MRdata <- read_dta(opt$mr)
+    mr_cols <- req_cols$col_name[req_cols$survey_type == "mr"]
+    for (col in mr_cols) {
+      if (!col %in% colnames(MRdata)) {
+        MRdata[[col]] <- NA
+      }
+    }
     # Run MR analysis scripts
     source(here(paste0(chap,"/FP_KNOW.R")))
     source(here(paste0(chap,"/FP_COMM.R")))
+    result <- CREATE_FP_KNOW(IRdata=NULL, MRdata=MRdata)
+    message("Processed IRdata for FP_KNOW...")
+    result <- CREATE_FP_COMM(IRdata=NULL, MRdata=MRdata)
     source(here(paste0(chap,"/FP_microtables.R")))
   }
 } else {

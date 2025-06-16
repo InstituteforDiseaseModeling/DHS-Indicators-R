@@ -4,50 +4,59 @@
 # Data outputs:    DTA files with all indicators at individual level
 # ******************************************************************************
 
+source(here(paste0(chap,"/FP_KNOW.R")))
+source(here(paste0(chap,"/FP_USE.R")))
+source(here(paste0(chap,"/FP_Need.R")))
+source(here(paste0(chap,"/FP_COMM.R")))
+
 
 #' Run indicators processing for microdata (function version)
 #' @param IRdata data.frame for IR data (or NULL)
 #' @param MRdata data.frame for MR data (or NULL)
-#' @return list with IRdata and MRdata (after processing)
+#' @return data.frame for either IRdata and MRdata (after processing)
 run_indicators <- function(IRdata = NULL, MRdata = NULL) {
 
   chap <- "Chap07_FP"
-  # Process and export IRdata if provided
-  if (!is.null(IRdata)) {
-    assign("IRdata", IRdata, envir = .GlobalEnv)
-    message("Processing IRdata for micro export...")
-    message(paste("columns: ", ncol(IRdata)))
-     # Run IR analysis scripts
-    source(here(paste0(chap,"/FP_KNOW.R")), local = .GlobalEnv)
-    message("Processed IRdata for FP_KNOW...")
-    source(here(paste0(chap,"/FP_USE.R")), local = .GlobalEnv)
-    message("Processed IRdata for FP_USE...")
-    source(here(paste0(chap,"/FP_Need.R")), local = .GlobalEnv)
-    message("Processed IRdata for FP_Need...")
-    source(here(paste0(chap,"/FP_COMM.R")), local = .GlobalEnv)
-    message("Processed IRdata for FP_COMM...")
-    IRdata <- get("IRdata", envir = .GlobalEnv)
-    # message(paste("columns: ", ncol(IRdata)))
-    all_cols <- colnames(IRdata)
-    fp_prefix <- all_cols[grepl("fp_", all_cols)]
-    # message(paste("output total: ", length(fp_prefix)))  
-    return(IRdata[, c(fp_prefix, "v001", "v002", "v003")])
+  req_cols <- read.csv(here("required_col.csv"), stringsAsFactors = FALSE)
+  ir_cols <- req_cols$col_name[req_cols$survey_type == "ir"]
+  mr_cols <- req_cols$col_name[req_cols$survey_type == "mr"]
+  
+  if (!is.null(IRdata)){
+    for (col in ir_cols) {
+      if (!col %in% colnames(IRdata)) {
+        IRdata[[col]] <- NA
+      }
+    }
   }
+  if (!is.null(MRdata)){
+    for (col in ir_cols) {
+      if (!col %in% colnames(MRdata)) {
+        MRdata[[col]] <- NA
+      }
+    }
+  }
+  
+  # Run IR analysis scripts
+  result <- CREATE_FP_KNOW(IRdata=IRdata, MRdata=MRdata)
+  message("Processed IRdata for FP_KNOW...")
+  result <- CREATE_FP_COMM(IRdata=result$IRdata, MRdata=result$MRdata)
+  message("Processed IRdata for FP_COMM...")
+  IRdata <- CREATE_FP_USE(IRdata=result$IRdata)
+  message("Processed IRdata for FP_USE...")
+  IRdata <- CREATE_FP_Need(IRdata=IRdata)
+  message("Processed IRdata for FP_Need...")
 
-  # Process and export MRdata if provided
+  fp_prefix <- all_cols[grepl("fp_", all_cols)]
   
-  if (!is.null(MRdata)) {
-    assign("MRdata", MRdata, envir = .GlobalEnv)
-    message("Processing MRdata for micro export...")
-    source(here(paste0(chap,"/FP_KNOW.R")), local = .GlobalEnv)
-    message("Processed MRdata for FP_KNOW...")
-    source(here(paste0(chap,"/FP_COMM.R")), local = .GlobalEnv)
-    message("Processed MRdata for FP_COMM...")
+  # for spark operations, result must be table format
+  if (!is.null(IRdata)){
+    message(paste("columns: ", ncol(IRdata)))
+    all_cols <- colnames(IRdata)
+    return(IRdata[, c(fp_prefix, req_cols)])
+  } else if (!is.null(MRdata)){
+    message(paste("columns: ", ncol(MRdata)))
     all_cols <- colnames(MRdata)
-    fp_prefix <- all_cols[grepl("^fp_", all_cols)]
-     return(MRdata[, c(fp_prefix, "mv001", "mv002", "mv003")])
+    return(MRdata[, c(fp_prefix, req_cols)])
   }
-  
-  message("Micro data export complete!")
   
 }
