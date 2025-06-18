@@ -3,13 +3,6 @@
 # Purpose:         Process and export microdata with all indicators (function version)
 # Data outputs:    DTA files with all indicators at individual level
 # ******************************************************************************
-
-source(here(paste0(chap,"/FP_KNOW.R")))
-source(here(paste0(chap,"/FP_USE.R")))
-source(here(paste0(chap,"/FP_Need.R")))
-source(here(paste0(chap,"/FP_COMM.R")))
-
-
 #' Run indicators processing for microdata (function version)
 #' @param IRdata data.frame for IR data (or NULL)
 #' @param MRdata data.frame for MR data (or NULL)
@@ -17,7 +10,12 @@ source(here(paste0(chap,"/FP_COMM.R")))
 run_indicators <- function(IRdata = NULL, MRdata = NULL) {
 
   chap <- "Chap07_FP"
-  req_cols <- read.csv(here("required_col.csv"), stringsAsFactors = FALSE)
+  # source(here(paste0(chap,"/FP_KNOW.R")))
+  # source(here(paste0(chap,"/FP_USE.R")))
+  # source(here(paste0(chap,"/FP_Need.R")))
+  # source(here(paste0(chap,"/FP_COMM.R")))
+  # req_cols <- read.csv(here("required_col.csv"), stringsAsFactors = FALSE)
+  req_cols <- read.csv("required_col.csv", stringsAsFactors = FALSE)
   ir_cols <- req_cols$col_name[req_cols$survey_type == "ir"]
   mr_cols <- req_cols$col_name[req_cols$survey_type == "mr"]
   

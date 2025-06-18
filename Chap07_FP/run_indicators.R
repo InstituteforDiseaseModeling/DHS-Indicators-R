@@ -103,7 +103,7 @@ if (!is.null(opt$ir) || !is.null(opt$mr)) {
     # Run IR analysis scripts
     source(here(paste0(chap,"/FP_KNOW.R")))
     source(here(paste0(chap,"/FP_USE.R")))
-    source(here(paste0(chap,"/FP_NEED.R")))
+    source(here(paste0(chap,"/FP_Need.R")))
     source(here(paste0(chap,"/FP_COMM.R")))
     
     # Run IR analysis scripts
