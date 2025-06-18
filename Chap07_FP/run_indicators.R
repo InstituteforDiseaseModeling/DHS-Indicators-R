@@ -100,6 +100,7 @@ if (!is.null(opt$ir) || !is.null(opt$mr)) {
         IRdata[[col]] <- NA
       }
     }
+    IRdata <- IRdata[, ir_cols, drop = FALSE]
     # Run IR analysis scripts
     source(here(paste0(chap,"/FP_KNOW.R")))
     source(here(paste0(chap,"/FP_USE.R")))
@@ -118,9 +119,9 @@ if (!is.null(opt$ir) || !is.null(opt$mr)) {
     
     source(here(paste0(chap,"/FP_microtables.R")))
     write_micro_variables(IRdata=IRdata, 
-                          MRdata=MRdata, 
+                          MRdata=NULL, 
                           source_filename_ir=opt$ir,
-                          source_filename_mr=opt$mr,
+                          source_filename_mr=NULL,
                           output_dir=opt$`output-dir`)
 
   # Optional analyses
@@ -150,6 +151,11 @@ if (!is.null(opt$ir) || !is.null(opt$mr)) {
     message("Processed IRdata for FP_KNOW...")
     result <- CREATE_FP_COMM(IRdata=NULL, MRdata=MRdata)
     source(here(paste0(chap,"/FP_microtables.R")))
+    write_micro_variables(IRdata=NULL, 
+                          MRdata=MRdata, 
+                          source_filename_ir=NULL,
+                          source_filename_mr=opt$mr,
+                          output_dir=opt$`output-dir`)
   }
 } else {
   stop("Either IR or MR data file must be specified using --ir=FILENAME.dta or --mr=FILENAME.dta")
