@@ -144,15 +144,16 @@ if (!is.null(opt$ir) || !is.null(opt$mr)) {
         MRdata[[col]] <- NA
       }
     }
+    MRdata <- MRdata[, mr_cols, drop = FALSE]
     # Run MR analysis scripts
     source(here(paste0(chap,"/FP_KNOW.R")))
     source(here(paste0(chap,"/FP_COMM.R")))
     result <- CREATE_FP_KNOW(IRdata=NULL, MRdata=MRdata)
     message("Processed IRdata for FP_KNOW...")
-    result <- CREATE_FP_COMM(IRdata=NULL, MRdata=MRdata)
+    result <- CREATE_FP_COMM(IRdata=NULL, MRdata=result$MRdata)
     source(here(paste0(chap,"/FP_microtables.R")))
     write_micro_variables(IRdata=NULL, 
-                          MRdata=MRdata, 
+                          MRdata=result$MRdata, 
                           source_filename_ir=NULL,
                           source_filename_mr=opt$mr,
                           output_dir=opt$`output-dir`)

@@ -8,18 +8,20 @@
 #' Get output filename for micro data
 #' 
 #' @param input_filename Original data filename 
-#' @param output_dir Optional output directory
+#' @param suffix Optional suffix to append on filename
 #' @return Full path to output file with _micro suffix
-get_output_filename <- function(input_filename, output_dir = NULL) {
+get_output_filename <- function(input_filename, suffix = NULL) {
   # Extract base filename without extension
   base_name <- tools::file_path_sans_ext(basename(input_filename))
-  # Add _micro suffix
-  new_name <- paste0(toupper(base_name), "_MICRO.DTA")
-  # Add output directory if provided
-  if (!is.null(output_dir)) {
-    new_name <- file.path(output_dir, new_name)
+  country_code <- substr(base_name, 1, 2)
+  ext <- tools::file_ext(basename(input_filename))
+  # Add _micro suffix if provided
+  if (!is.null(suffix)){
+    new_name <- paste0(base_name, suffix, ".", ext)
+  } else{
+    new_name <- paste0(base_name, ".", ext)
   }
-  return(new_name)
+  return(file.path(country_code, new_name))
 }
 
 #' Write IR micro data with appending capability
@@ -37,7 +39,7 @@ write_dta_micro <- function(data, input_filename, output_dir = NULL, chapter_tag
   if (is.null(output_dir) || is.null(chapter_tag)) {
     stop("Both output_dir and chapter_tag must be provided.")
   }
-  output_file <- get_output_filename(input_filename)
+  output_file <- get_output_filename(input_filename, "_var")
   output_path <- file.path(output_dir, chapter_tag, output_file)
 
   # Ensure the directory exists

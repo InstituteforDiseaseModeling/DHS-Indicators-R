@@ -1,4 +1,10 @@
 survey_type,col_name
+ir,caseid
+ir,v000
+ir,v001
+ir,v002
+ir,v003
+ir,v004
 ir,v005
 ir,v007
 ir,v013
@@ -7,6 +13,7 @@ ir,v025
 ir,v106
 ir,v190
 ir,v201
+ir,v213
 ir,v215
 ir,v217
 ir,v222
@@ -51,6 +58,7 @@ ir,v320
 ir,v323
 ir,v323a
 ir,v326
+ir,v362
 ir,v384a
 ir,v384b
 ir,v384c
@@ -97,10 +105,13 @@ ir,vcal_6
 ir,vcal_7
 ir,vcal_8
 ir,vcal_9
-mr,mv005
+mr,mcaseid
+mr,mv000
 mr,mv001
 mr,mv002
 mr,mv003
+mr,mv004
+mr,mv005
 mr,mv301
 mr,mv304_6
 mr,mv384a

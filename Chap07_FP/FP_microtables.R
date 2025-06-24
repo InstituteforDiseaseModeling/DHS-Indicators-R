@@ -9,19 +9,6 @@
 # Source the utility functions
 source(here("utils/write_micro.R"))
 
-# Function to derive output filename based on input filename
-get_output_filename <- function(input_filename, output_dir = NULL) {
-  # Extract base filename without extension
-  base_name <- tools::file_path_sans_ext(basename(input_filename))
-  # Add _micro suffix
-  new_name <- paste0(base_name, "_micro.dta")
-  # Add output directory if provided
-  if (!is.null(output_dir)) {
-    new_name <- file.path(output_dir, new_name)
-  }
-  return(new_name)
-}
-
 write_micro_variables <- function(IRdata, MRdata, source_filename_ir, source_filename_mr, output_dir) {
   # Process and export IRdata if it exists
   if (!is.null(IRdata)) {

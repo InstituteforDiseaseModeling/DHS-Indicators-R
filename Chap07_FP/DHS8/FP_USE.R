@@ -426,7 +426,7 @@ IRdata <- IRdata %>%
 # Source for female sterilization users
 IRdata <- IRdata %>%
   mutate(fp_source_fster = 
-           ifelse(v312==6, v326, NA)) %>%
+           ifelse(v312==6, v326, NA_real_)) %>%
   set_value_labels(fp_source_fster = val_labels(IRdata$v326)) %>%
   set_variable_labels(fp_source_fster = "Source for female sterilization")
 
@@ -434,7 +434,7 @@ IRdata <- IRdata %>%
 # Source for pill users
 IRdata <- IRdata %>%
   mutate(fp_source_pill = 
-           ifelse(v312==1, v326, NA)) %>%
+           ifelse(v312==1, v326, NA_real_)) %>%
   set_value_labels(fp_source_pill = val_labels(IRdata$v326)) %>%
   set_variable_labels(fp_source_pill = "Source for pill")
 
@@ -442,7 +442,7 @@ IRdata <- IRdata %>%
 # Source for IUD users
 IRdata <- IRdata %>%
   mutate(fp_source_iud = 
-         ifelse(v312==2, v326, NA)) %>%
+         ifelse(v312==2, v326, NA_real_)) %>%
   set_value_labels(fp_source_iud = val_labels(IRdata$v326)) %>%
   set_variable_labels(fp_source_iud = "Source for IUD")
 
@@ -450,7 +450,7 @@ IRdata <- IRdata %>%
 # Source for injectable users
 IRdata <- IRdata %>%
   mutate(fp_source_inj = 
-           ifelse(v312==3, v326, NA)) %>%
+           ifelse(v312==3, v326, NA_real_)) %>%
   set_value_labels(fp_source_inj = val_labels(IRdata$v326)) %>%
   set_variable_labels(fp_source_inj = "Source for injectables")
 
@@ -458,7 +458,7 @@ IRdata <- IRdata %>%
 # Source for implant users
 IRdata <- IRdata %>%
   mutate(fp_source_imp = 
-           ifelse(v312==11, v326, NA)) %>%
+           ifelse(v312==11, v326, NA_real_)) %>%
   set_value_labels(fp_source_imp = val_labels(IRdata$v326)) %>%
   set_variable_labels(fp_source_imp = "Source for implants")
 
@@ -466,7 +466,7 @@ IRdata <- IRdata %>%
 # Source for male condom users
 IRdata <- IRdata %>%
   mutate(fp_source_mcond = 
-           ifelse(v312==5, v326, NA)) %>%
+           ifelse(v312==5, v326, NA_real_)) %>%
   set_value_labels(fp_source_mcond = val_labels(IRdata$v326)) %>%
   set_variable_labels(fp_source_mcond = "Source for male condom")
 
