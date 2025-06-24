@@ -448,14 +448,14 @@ CREATE_FP_USE <- function(IRdata){
   
     # Source for all 
     IRdata <- IRdata %>%
-      mutate(fp_source_tot = ifelse(!"v326" %in% colnames(IRdata), NA, v326)) %>%
+      mutate(fp_source_tot = ifelse(!"v326" %in% colnames(IRdata), NA_real_, v326)) %>%
       set_variable_labels(fp_source_tot = "Source of contraception - total")
   
   
     # Source for female sterilization users
     IRdata <- IRdata %>%
       mutate(fp_source_fster = 
-              ifelse(!all(c("v312", "v326") %in% colnames(IRdata)), NA, ifelse(v312==6, v326, NA))) %>%
+              ifelse(!all(c("v312", "v326") %in% colnames(IRdata)), NA_real_, ifelse(v312==6, v326, NA_real_))) %>%
       set_value_labels(fp_source_fster = get_value_labels(IRdata$v326)) %>%
       set_variable_labels(fp_source_fster = "Source for female sterilization")
   
@@ -463,7 +463,7 @@ CREATE_FP_USE <- function(IRdata){
     # Source for pill users
     IRdata <- IRdata %>%
       mutate(fp_source_pill = 
-              ifelse(!all(c("v312", "v326") %in% colnames(IRdata)), NA, ifelse(v312==1, v326, NA))) %>%
+              ifelse(!all(c("v312", "v326") %in% colnames(IRdata)), NA_real_, ifelse(v312==1, v326, NA_real_))) %>%
       set_value_labels(fp_source_pill = get_value_labels(IRdata$v326)) %>%
       set_variable_labels(fp_source_pill = "Source for pill")
   
@@ -471,7 +471,7 @@ CREATE_FP_USE <- function(IRdata){
     # Source for IUD users
     IRdata <- IRdata %>%
       mutate(fp_source_iud = 
-              ifelse(!all(c("v312", "v326") %in% colnames(IRdata)), NA, ifelse(v312==2, v326, NA))) %>%
+              ifelse(!all(c("v312", "v326") %in% colnames(IRdata)), NA_real_, ifelse(v312==2, v326, NA_real_))) %>%
       set_value_labels(fp_source_iud = get_value_labels(IRdata$v326)) %>%
       set_variable_labels(fp_source_iud = "Source for IUD")
   
@@ -479,7 +479,7 @@ CREATE_FP_USE <- function(IRdata){
     # Source for injectable users
     IRdata <- IRdata %>%
       mutate(fp_source_inj = 
-              ifelse(!all(c("v312", "v326") %in% colnames(IRdata)), NA, ifelse(v312==3, v326, NA))) %>%
+              ifelse(!all(c("v312", "v326") %in% colnames(IRdata)), NA_real_, ifelse(v312==3, v326, NA_real_))) %>%
       set_value_labels(fp_source_inj = get_value_labels(IRdata$v326)) %>%
       set_variable_labels(fp_source_inj = "Source for injectables")
   
@@ -487,7 +487,7 @@ CREATE_FP_USE <- function(IRdata){
     # Source for implant users
     IRdata <- IRdata %>%
       mutate(fp_source_imp = 
-              ifelse(!all(c("v312", "v326") %in% colnames(IRdata)), NA, ifelse(v312==11, v326, NA))) %>%
+              ifelse(!all(c("v312", "v326") %in% colnames(IRdata)), NA_real_, ifelse(v312==11, v326, NA_real_))) %>%
       set_value_labels(fp_source_imp = get_value_labels(IRdata$v326)) %>%
       set_variable_labels(fp_source_imp = "Source for implants")
   
@@ -495,7 +495,7 @@ CREATE_FP_USE <- function(IRdata){
     # Source for male condom users
     IRdata <- IRdata %>%
       mutate(fp_source_mcond = 
-              ifelse(!all(c("v312", "v326") %in% colnames(IRdata)), NA, ifelse(v312==5, v326, NA))) %>%
+              ifelse(!all(c("v312", "v326") %in% colnames(IRdata)), NA_real_, ifelse(v312==5, v326, NA_real_))) %>%
       set_value_labels(fp_source_mcond = get_value_labels(IRdata$v326)) %>%
       set_variable_labels(fp_source_mcond = "Source for male condom")
   
