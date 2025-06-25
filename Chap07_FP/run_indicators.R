@@ -50,13 +50,20 @@ if (!dir.exists(output_path)) {
 # Redirecting logs to a file in the output directory
 
 # Define log file path
+
+if (!is.null(opt$ir) && !is.null(opt$mr)) {
+  log_file_name <- paste0(basename(opt$ir), "_", basename(opt$mr), ".log") 
+} else if (!is.null(opt$ir)) {
+  log_file_name <- paste0(basename(opt$ir), ".log")
+} else if (!is.null(opt$mr)) {
+  log_file_name <- paste0(basename(opt$mr), ".log")
+} else {
+  log_file_name <- "no_input_error.log"
+}
+
 log_file <- file.path(
   output_path,
-  paste0(
-    if (!is.null(opt$ir)) basename(opt$ir) else "",
-    "_",
-    if (!is.null(opt$mr)) paste0(basename(opt$mr), ".log") else ".log"
-  )
+  log_file_name
 )
 
 # Open a connection to the log file
@@ -89,6 +96,12 @@ on.exit({
 
 # Validate inputs
 if (!is.null(opt$ir) || !is.null(opt$mr)) {
+  
+  source(here(paste0(chap,"/FP_KNOW.R")))
+  source(here(paste0(chap,"/FP_USE.R")))
+  source(here(paste0(chap,"/FP_Need.R")))
+  source(here(paste0(chap,"/FP_COMM.R")))
+  
   # Ensure all required columns exist in IRdata and MRdata
   req_cols <- read.csv(here( "required_col.csv"), stringsAsFactors = FALSE)
   if (!is.null(opt$ir)) {
@@ -101,12 +114,6 @@ if (!is.null(opt$ir) || !is.null(opt$mr)) {
       }
     }
     IRdata <- IRdata[, ir_cols, drop = FALSE]
-    # Run IR analysis scripts
-    source(here(paste0(chap,"/FP_KNOW.R")))
-    source(here(paste0(chap,"/FP_USE.R")))
-    source(here(paste0(chap,"/FP_Need.R")))
-    source(here(paste0(chap,"/FP_COMM.R")))
-    
     # Run IR analysis scripts
     result <- CREATE_FP_KNOW(IRdata=IRdata, MRdata=NULL)
     message("Processed IRdata for FP_KNOW...")
@@ -124,16 +131,16 @@ if (!is.null(opt$ir) || !is.null(opt$mr)) {
                           source_filename_mr=NULL,
                           output_dir=opt$`output-dir`)
 
-  # Optional analyses
-  if (!opt$`skip-events`) {
-    message("Running events analysis...")
-    source(here(paste0(chap,"/FP_EVENTS.R")))
-  }
-
-  if (!opt$`skip-discont`) {
-    message("Running discontinuation analysis...")
-    source(here(paste0(chap,"/FP_DISCONT.R")))
-  }
+    # Optional analyses
+    if (!opt$`skip-events`) {
+      message("Running events analysis...")
+      source(here(paste0(chap,"/FP_EVENTS.R")))
+    }
+  
+    if (!opt$`skip-discont`) {
+      message("Running discontinuation analysis...")
+      source(here(paste0(chap,"/FP_DISCONT.R")))
+    }
   }
   if (!is.null(opt$mr)) {
     message("Processing MR file: ", opt$mr)
@@ -146,8 +153,6 @@ if (!is.null(opt$ir) || !is.null(opt$mr)) {
     }
     MRdata <- MRdata[, mr_cols, drop = FALSE]
     # Run MR analysis scripts
-    source(here(paste0(chap,"/FP_KNOW.R")))
-    source(here(paste0(chap,"/FP_COMM.R")))
     result <- CREATE_FP_KNOW(IRdata=NULL, MRdata=MRdata)
     message("Processed IRdata for FP_KNOW...")
     result <- CREATE_FP_COMM(IRdata=NULL, MRdata=result$MRdata)

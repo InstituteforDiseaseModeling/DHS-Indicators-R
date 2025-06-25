@@ -341,7 +341,7 @@ CREATE_FP_KNOW <- function(IRdata, MRdata){
     # Any method 
     MRdata <- MRdata %>%
       mutate(fp_know_any = as.numeric(
-              ifelse(!"mv301" %in% colnames(IRdata), NA, ifelse(!is.na(mv301) & mv301 > 0 & mv301 < 8, 1, 0)))) %>%
+              ifelse(!"mv301" %in% colnames(MRdata), NA, ifelse(!is.na(mv301) & mv301 > 0 & mv301 < 8, 1, 0)))) %>%
       set_value_labels(fp_know_any = c(yes = 1, no = 0)) %>%
       set_variable_labels(fp_know_any = "Know any contraceptive method")
     
@@ -349,7 +349,7 @@ CREATE_FP_KNOW <- function(IRdata, MRdata){
     # Modern method
     MRdata <- MRdata %>%
       mutate(fp_know_mod = as.numeric(
-              ifelse(!"mv301" %in% colnames(IRdata), NA,ifelse(!is.na(mv301) & mv301 ==3, 1, 0)))) %>%
+              ifelse(!"mv301" %in% colnames(MRdata), NA,ifelse(!is.na(mv301) & mv301 ==3, 1, 0)))) %>%
       set_value_labels(fp_know_mod = c(yes = 1, no = 0)) %>%
       set_variable_labels(fp_know_mod = "Know any modern method")
     
@@ -357,7 +357,7 @@ CREATE_FP_KNOW <- function(IRdata, MRdata){
     # Female sterilization  
     MRdata <- MRdata %>%
       mutate(fp_know_fster = as.numeric(
-              ifelse(!"mv304_6" %in% colnames(IRdata), NA, ifelse(!is.na(mv304_6) & mv304_6>0 & mv304_6<8, 1, 0)))) %>%
+              ifelse(!"mv304_6" %in% colnames(MRdata), NA, ifelse(!is.na(mv304_6) & mv304_6>0 & mv304_6<8, 1, 0)))) %>%
       set_value_labels(fp_know_fster = c(yes = 1, no = 0)) %>%
       set_variable_labels(fp_know_fster = "Know female sterilization")
     
@@ -365,7 +365,7 @@ CREATE_FP_KNOW <- function(IRdata, MRdata){
     # Male sterilization  
     MRdata <- MRdata %>%
       mutate(fp_know_mster = as.numeric(
-              ifelse(!"mv304_7" %in% colnames(IRdata), NA, ifelse(!is.na(mv304_7) & mv304_7>0 & mv304_7<8, 1, 0)))) %>%
+              ifelse(!"mv304_7" %in% colnames(MRdata), NA, ifelse(!is.na(mv304_7) & mv304_7>0 & mv304_7<8, 1, 0)))) %>%
       set_value_labels(fp_know_mster = c(yes = 1, no = 0)) %>%
       set_variable_labels(fp_know_mster = "Know male sterilization")
     
@@ -373,7 +373,7 @@ CREATE_FP_KNOW <- function(IRdata, MRdata){
     # The contraceptive pill 
     MRdata <- MRdata %>%
       mutate(fp_know_pill = as.numeric(
-              ifelse(!"mv304_1" %in% colnames(IRdata), NA, ifelse(!is.na(mv304_1) & mv304_1>0 & mv304_1<8, 1, 0))))%>%
+              ifelse(!"mv304_1" %in% colnames(MRdata), NA, ifelse(!is.na(mv304_1) & mv304_1>0 & mv304_1<8, 1, 0))))%>%
       set_value_labels(fp_know_pill = c(yes = 1, no = 0)) %>%
       set_variable_labels(fp_know_pill = "Know pill")
     
@@ -381,7 +381,7 @@ CREATE_FP_KNOW <- function(IRdata, MRdata){
     # Intrauterine contraceptive device 
     MRdata <- MRdata %>%
       mutate(fp_know_iud = as.numeric(
-              ifelse(!"mv304_2" %in% colnames(IRdata), NA, ifelse(!is.na(mv304_2) & mv304_2>0 & mv304_2<8, 1, 0)))) %>%
+              ifelse(!"mv304_2" %in% colnames(MRdata), NA, ifelse(!is.na(mv304_2) & mv304_2>0 & mv304_2<8, 1, 0)))) %>%
       set_value_labels(fp_know_iud = c(yes = 1, no = 0)) %>%
       set_variable_labels(fp_know_iud = "Know IUD")
     
@@ -389,7 +389,7 @@ CREATE_FP_KNOW <- function(IRdata, MRdata){
     # Injectables (Depo-Provera) 
     MRdata <- MRdata %>%
       mutate(fp_know_inj = as.numeric(
-              ifelse(!"mv304_8" %in% colnames(IRdata), NA, ifelse(!is.na(mv304_3) & mv304_3>0 & mv304_3<8, 1, 0)))) %>%
+              ifelse(!"mv304_8" %in% colnames(MRdata), NA, ifelse(!is.na(mv304_3) & mv304_3>0 & mv304_3<8, 1, 0)))) %>%
       set_value_labels(fp_know_inj = c(yes = 1, no = 0)) %>%
       set_variable_labels(fp_know_inj = "Know injectables")
     
@@ -397,7 +397,7 @@ CREATE_FP_KNOW <- function(IRdata, MRdata){
     # Implants (Norplant) 
     MRdata <- MRdata %>%
       mutate(fp_know_imp = as.numeric(
-              ifelse(!"mv304_11" %in% colnames(IRdata), NA, ifelse(!is.na(mv304_11) & mv304_11>0 & mv304_11<8, 1, 0)))) %>%
+              ifelse(!"mv304_11" %in% colnames(MRdata), NA, ifelse(!is.na(mv304_11) & mv304_11>0 & mv304_11<8, 1, 0)))) %>%
       set_value_labels(fp_know_imp = c(yes = 1, no = 0)) %>%
       set_variable_labels(fp_know_imp = "Know implants")
     
@@ -405,7 +405,7 @@ CREATE_FP_KNOW <- function(IRdata, MRdata){
     # Male condom 
     MRdata <- MRdata %>%
       mutate(fp_know_mcond = as.numeric(
-              ifelse(!"mv304_5" %in% colnames(IRdata), NA, ifelse(!is.na(mv304_5) & mv304_5>0 & mv304_5<8, 1, 0)))) %>%
+              ifelse(!"mv304_5" %in% colnames(MRdata), NA, ifelse(!is.na(mv304_5) & mv304_5>0 & mv304_5<8, 1, 0)))) %>%
       set_value_labels(fp_know_mcond = c(yes = 1, no = 0)) %>%
       set_variable_labels(fp_know_mcond = "Know male condoms")
     
@@ -413,7 +413,7 @@ CREATE_FP_KNOW <- function(IRdata, MRdata){
     # Female condom 
     MRdata <- MRdata %>%
       mutate(fp_know_fcond = as.numeric(
-              ifelse(!"mv304_14" %in% colnames(IRdata), NA, ifelse(!is.na(mv304_14) & mv304_14>0 & mv304_14<8, 1, 0)))) %>%
+              ifelse(!"mv304_14" %in% colnames(MRdata), NA, ifelse(!is.na(mv304_14) & mv304_14>0 & mv304_14<8, 1, 0)))) %>%
       set_value_labels(fp_know_fcond = c(yes = 1, no = 0)) %>%
       set_variable_labels(fp_know_fcond = "Know female condom")
     
@@ -421,7 +421,7 @@ CREATE_FP_KNOW <- function(IRdata, MRdata){
     # Emergency contraception 
     MRdata <- MRdata %>%
       mutate(fp_know_ec = as.numeric(
-              ifelse(!"mv304_16" %in% colnames(IRdata), NA, ifelse(!is.na(mv304_16) & mv304_16>0 & mv304_16<8, 1, 0)))) %>%
+              ifelse(!"mv304_16" %in% colnames(MRdata), NA, ifelse(!is.na(mv304_16) & mv304_16>0 & mv304_16<8, 1, 0)))) %>%
       set_value_labels(fp_know_ec = c(yes = 1, no = 0)) %>%
       set_variable_labels(fp_know_ec = "Know emergency contraception")
     
@@ -429,7 +429,7 @@ CREATE_FP_KNOW <- function(IRdata, MRdata){
     # Standard days method (SDM) 
     MRdata <- MRdata %>%
       mutate(fp_know_sdm = as.numeric(
-              ifelse(!"mv304_18" %in% colnames(IRdata), NA, ifelse(!is.na(mv304_18) & mv304_18>0 & mv304_18<8, 1, 0)))) %>%
+              ifelse(!"mv304_18" %in% colnames(MRdata), NA, ifelse(!is.na(mv304_18) & mv304_18>0 & mv304_18<8, 1, 0)))) %>%
       set_value_labels(fp_know_sdm = c(yes = 1, no = 0)) %>%
       set_variable_labels(fp_know_sdm = "Know standard days method")
     
@@ -437,7 +437,7 @@ CREATE_FP_KNOW <- function(IRdata, MRdata){
     # Lactational amenorrhea method (LAM) 
     MRdata <- MRdata %>%
       mutate(fp_know_lam = as.numeric( 
-              ifelse(!"mv304_13" %in% colnames(IRdata), NA, ifelse(!is.na(mv304_13) & mv304_13>0 & mv304_13<8, 1, 0)))) %>%
+              ifelse(!"mv304_13" %in% colnames(MRdata), NA, ifelse(!is.na(mv304_13) & mv304_13>0 & mv304_13<8, 1, 0)))) %>%
       set_value_labels(fp_know_lam = c(yes = 1, no = 0)) %>%
       set_variable_labels(fp_know_lam = "Know LAM")
     
@@ -445,7 +445,7 @@ CREATE_FP_KNOW <- function(IRdata, MRdata){
     # Country-specific modern methods and other modern contraceptive methods 
     MRdata <- MRdata %>%
       mutate(fp_know_omod = as.numeric(
-              ifelse(!"mv304_17" %in% colnames(IRdata), NA, ifelse(!is.na(mv304_17) & mv304_17>0 & mv304_17<8, 1, 0)))) %>%
+              ifelse(!"mv304_17" %in% colnames(MRdata), NA, ifelse(!is.na(mv304_17) & mv304_17>0 & mv304_17<8, 1, 0)))) %>%
       set_value_labels(fp_know_omod = c(yes = 1, no = 0)) %>%
       set_variable_labels(fp_know_omod = "Know other modern method")
     
@@ -453,7 +453,7 @@ CREATE_FP_KNOW <- function(IRdata, MRdata){
     # Periodic abstinence (rhythm, calendar method) 
     MRdata <- MRdata %>%
       mutate(fp_know_rhy = as.numeric(
-              ifelse(!"mv304_8" %in% colnames(IRdata), NA, ifelse(!is.na(mv304_8) & mv304_8>0 & mv304_8<8, 1, 0)))) %>%
+              ifelse(!"mv304_8" %in% colnames(MRdata), NA, ifelse(!is.na(mv304_8) & mv304_8>0 & mv304_8<8, 1, 0)))) %>%
       set_value_labels(fp_know_rhy = c(yes = 1, no = 0)) %>%
       set_variable_labels(fp_know_rhy = "Know rhythm method")
     
@@ -461,7 +461,7 @@ CREATE_FP_KNOW <- function(IRdata, MRdata){
     # Withdrawal (coitus interruptus) 
     MRdata <- MRdata %>%
       mutate(fp_know_wthd = as.numeric(
-              ifelse(!"mv304_9" %in% colnames(IRdata), NA, ifelse(!is.na(mv304_9) & mv304_9>0 & mv304_9<8, 1, 0)))) %>%
+              ifelse(!"mv304_9" %in% colnames(MRdata), NA, ifelse(!is.na(mv304_9) & mv304_9>0 & mv304_9<8, 1, 0)))) %>%
       set_value_labels(fp_know_wthd = c(yes = 1, no = 0)) %>%
       set_variable_labels(fp_know_wthd = "Know withdrawal method")
     
@@ -469,7 +469,7 @@ CREATE_FP_KNOW <- function(IRdata, MRdata){
     # Country-specific traditional methods, and folk methods 
     MRdata <- MRdata %>%
       mutate(fp_know_other = as.numeric(
-              ifelse(!"mv304_10" %in% colnames(IRdata), NA, ifelse(!is.na(mv304_10) & mv304_10>0 & mv304_10<8, 1, 0)))) %>%
+              ifelse(!"mv304_10" %in% colnames(MRdata), NA, ifelse(!is.na(mv304_10) & mv304_10>0 & mv304_10<8, 1, 0)))) %>%
       set_value_labels(fp_know_other = c(yes = 1, no = 0)) %>%
       set_variable_labels(fp_know_iud = "Know other method")
     
@@ -500,7 +500,7 @@ CREATE_FP_KNOW <- function(IRdata, MRdata){
     
     
     # Mean methods known among married
-    if ("mv502" %in% colnames(IRdata)){
+    if ("mv502" %in% colnames(MRdata)){
       fp_know_mean_mar <- MRdata %>%
         filter(., mv502==1) %>%
         summarize(fp_know_mean_mar = weighted.mean(fp_know_sum, wt)) %>%

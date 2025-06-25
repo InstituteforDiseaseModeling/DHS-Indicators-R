@@ -220,7 +220,7 @@ CREATE_FP_COMM <- function(IRdata, MRdata) {
     # Did not hear a family planning message from any of the 4 media sources
     MRdata <- MRdata %>%
       mutate(fp_message_noneof4 = as.numeric(
-              ifelse(!all(c("mv384a", "mv384b", "mv384c", "mv384d") %in% colnames(IRdata)), NA, ifelse(mv384a!=1 & mv384b!=1 & mv384c!=1 & mv384d!=1, 1, 0)))) %>%
+              ifelse(!all(c("mv384a", "mv384b", "mv384c", "mv384d") %in% colnames(MRdata)), NA, ifelse(mv384a!=1 & mv384b!=1 & mv384c!=1 & mv384d!=1, 1, 0)))) %>%
       set_value_labels(fp_message_noneof4 = c(yes = 1, no = 0)) %>%
       set_variable_labels(fp_message_noneof4 = "Exposure to family planning message any of four sources (TV, radio, paper, mobile)")
     
@@ -228,7 +228,7 @@ CREATE_FP_COMM <- function(IRdata, MRdata) {
     # Did not hear a family planning message from radio, TV or paper
     MRdata <- MRdata %>%
       mutate(fp_message_noneof3 = as.numeric(
-              ifelse(!all(c("mv384a", "mv384b", "mv384c")) %in% colnames(IRdata), NA,ifelse(mv384a!=1 & mv384b!=1 & mv384c!=1, 1, 0)))) %>%
+              ifelse(!all(c("mv384a", "mv384b", "mv384c")) %in% colnames(MRdata), NA,ifelse(mv384a!=1 & mv384b!=1 & mv384c!=1, 1, 0)))) %>%
       set_value_labels(fp_message_noneof3 = c(yes = 1, no = 0)) %>%
       set_variable_labels(fp_message_noneof3 = "Not exposed to TV, radio, or paper media sources")
   }
