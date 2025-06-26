@@ -107,7 +107,7 @@ if (!is.null(opt$ir) || !is.null(opt$mr)) {
   if (!is.null(opt$ir)) {
     message("Processing IR file: ", opt$ir)
     IRdata <- read_dta(opt$ir)
-    ir_cols <- req_cols$col_name[req_cols$survey_type == "ir"]
+    ir_cols <- req_cols$col_name[req_cols$survey_type == "ir" & req_cols$chapter=="7"]
     for (col in ir_cols) {
       if (!col %in% colnames(IRdata)) {
         IRdata[[col]] <- NA
@@ -145,7 +145,7 @@ if (!is.null(opt$ir) || !is.null(opt$mr)) {
   if (!is.null(opt$mr)) {
     message("Processing MR file: ", opt$mr)
     MRdata <- read_dta(opt$mr)
-    mr_cols <- req_cols$col_name[req_cols$survey_type == "mr"]
+    mr_cols <- req_cols$col_name[req_cols$survey_type == "mr" & req_cols$chapter=="7"]
     for (col in mr_cols) {
       if (!col %in% colnames(MRdata)) {
         MRdata[[col]] <- NA

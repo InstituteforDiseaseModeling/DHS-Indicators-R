@@ -16,8 +16,8 @@ run_indicators <- function(IRdata = NULL, MRdata = NULL) {
   # source(here(paste0(chap,"/FP_COMM.R")))
   # req_cols <- read.csv(here("required_col.csv"), stringsAsFactors = FALSE)
   req_cols <- read.csv("required_col.csv", stringsAsFactors = FALSE)
-  ir_cols <- req_cols$col_name[req_cols$survey_type == "ir"]
-  mr_cols <- req_cols$col_name[req_cols$survey_type == "mr"]
+  ir_cols <- req_cols$col_name[req_cols$survey_type == "ir" & req_cols$chapter=="7"]
+  mr_cols <- req_cols$col_name[req_cols$survey_type == "mr" & req_cols$chapter=="7"]
   
   if (!is.null(IRdata)){
     for (col in ir_cols) {
