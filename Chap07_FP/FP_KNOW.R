@@ -48,16 +48,14 @@ CREATE_FP_KNOW <- function(IRdata, MRdata){
   # Check if the object exists
   if (!is.null(IRdata)) {
     
-    
-    
     # to correct for the situation where variables that should be named as v304_0`i' but where named v304_`i', where i is from 1 to 9.
-    for(i in 1:9) {
-      if (paste0("v304_", i) %in% colnames(IRdata)) {
-        colnames(IRdata)[colnames(IRdata) == paste0("v304_", i)] <- paste0("v304_0", i)
+    for (i in 1:9) {
+      orig <- paste0("v304_", i)
+      new  <- paste0("v304_0", i)
+      if (orig %in% colnames(IRdata) && !(new %in% colnames(IRdata))) {
+        colnames(IRdata)[colnames(IRdata) == orig] <- new
       }
     }
-    
-    
     
     # Any method 
     IRdata <- IRdata %>%
@@ -331,12 +329,14 @@ CREATE_FP_KNOW <- function(IRdata, MRdata){
     ## KNOWLEDGE OF CONTRACEPTIVE METHODS
     
     # note: In the case some surveys have the variables mv304_01 as mv304_1 for instance
-    for(i in 1:9) {
-      if (paste0("mv304_0", i) %in% colnames(MRdata)){
-        colnames(MRdata)[colnames(MRdata) == paste0("mv304_0", i)] <- paste0("mv304_", i)
+   
+    for (i in 1:9) {
+      orig <- paste0("mv304_0", i)
+      new  <- paste0("mv304_", i)
+      if (orig %in% colnames(MRdata) && !(new %in% colnames(MRdata))) {
+        colnames(MRdata)[colnames(MRdata) == orig] <- new
       }
     }
-    
     
     # Any method 
     MRdata <- MRdata %>%
