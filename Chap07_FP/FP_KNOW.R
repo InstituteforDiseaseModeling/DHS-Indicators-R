@@ -57,6 +57,11 @@ CREATE_FP_KNOW <- function(IRdata, MRdata){
       }
     }
     
+    # Check dups
+    if (anyDuplicated(colnames(IRdata)) != 0) {
+      stop("IRdata has duplicated column names: ",
+       colnames(IRdata)[anyDuplicated(colnames(IRdata))])
+    }
     # Any method 
     IRdata <- IRdata %>%
       mutate(fp_know_any = as.numeric(
