@@ -35,6 +35,7 @@ library(labelled)
 ## FAMILY PLANNING MESSAGES
 
 # Family planning messages by radio 
+#' @export
 CREATE_FP_COMM <- function(IRdata, MRdata) {
     
   # Process IR data

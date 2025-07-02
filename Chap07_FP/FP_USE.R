@@ -73,6 +73,7 @@
 
 ## Family planning messages
 
+#' @export
 CREATE_FP_USE <- function(IRdata){
 
   if (!is.null(IRdata)){

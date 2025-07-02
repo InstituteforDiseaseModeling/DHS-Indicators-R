@@ -40,7 +40,7 @@
 
 
 ## KNOWLEDGE OF FAMILY PLANNING METHODS
-  
+#' @export
 CREATE_FP_KNOW <- function(IRdata, MRdata){
   ## indicators from IR file
 

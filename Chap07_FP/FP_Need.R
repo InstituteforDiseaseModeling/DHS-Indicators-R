@@ -39,6 +39,7 @@ library(sjmisc)
 # # read data for now (this will happen in main file, just using code here for temp)
 # IRdata <- read_dta(paste(datapath,"/",irdata,".dta",sep=""))
 
+#' @export
 CREATE_FP_NEED <- function(IRdata){
   
   if (!is.null(IRdata)){

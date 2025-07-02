@@ -8,13 +8,12 @@
 #' @param MRdata data.frame for MR data (or NULL)
 #' @return data.frame for either IRdata and MRdata (after processing)
 run_indicators <- function(IRdata = NULL, MRdata = NULL) {
+  box::use(Chap07_FP/CREATE_FP_KNOW)
+  box::use(Chap07_FP/CREATE_FP_COMM)
+  box::use(Chap07_FP/CREATE_FP_USE)
+  box::use(Chap07_FP/CREATE_FP_Need)
 
   chap <- "Chap07_FP"
-  # source(here(paste0(chap,"/FP_KNOW.R")))
-  # source(here(paste0(chap,"/FP_USE.R")))
-  # source(here(paste0(chap,"/FP_Need.R")))
-  # source(here(paste0(chap,"/FP_COMM.R")))
-  # req_cols <- read.csv(here("required_col.csv"), stringsAsFactors = FALSE)
   req_cols <- read.csv("required_col.csv", stringsAsFactors = FALSE)
   ir_cols <- req_cols$col_name[req_cols$survey_type == "ir" & req_cols$chapter=="7"]
   mr_cols <- req_cols$col_name[req_cols$survey_type == "mr" & req_cols$chapter=="7"]
