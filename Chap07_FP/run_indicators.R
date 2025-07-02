@@ -47,7 +47,14 @@ if (!dir.exists(output_path)) {
   dir.create(output_path, recursive = TRUE)
 }
 
-# Redirecting logs to a file in the output directory
+# Create dedicated logs directory
+logs_dir <- file.path(output_path, "logs")
+if (!dir.exists(logs_dir)) {
+  message("Creating logs directory: ", logs_dir)
+  dir.create(logs_dir, recursive = TRUE)
+}
+
+# Redirecting logs to a file in the dedicated logs directory
 
 # Define log file path
 
@@ -62,7 +69,7 @@ if (!is.null(opt$ir) && !is.null(opt$mr)) {
 }
 
 log_file <- file.path(
-  output_path,
+  logs_dir,
   log_file_name
 )
 
@@ -101,6 +108,7 @@ if (!is.null(opt$ir) || !is.null(opt$mr)) {
   source(here(paste0(chap,"/FP_USE.R")))
   source(here(paste0(chap,"/FP_Need.R")))
   source(here(paste0(chap,"/FP_COMM.R")))
+  source(here(paste0(chap,"/FP_Report.R")))
   
   # Ensure all required columns exist in IRdata and MRdata
   req_cols <- read.csv(here( "required_col.csv"), stringsAsFactors = FALSE)
@@ -131,6 +139,14 @@ if (!is.null(opt$ir) || !is.null(opt$mr)) {
                           source_filename_mr=NULL,
                           output_dir=opt$`output-dir`)
 
+   
+    reports_dir <- file.path(output_path, "reports")
+    if (!dir.exists(reports_dir)) {
+      dir.create(reports_dir, recursive = TRUE)
+    }
+    
+    CREATE_REPORT(IRdata, reports_dir, opt$ir)
+  
     # Optional analyses
     if (!opt$`skip-events`) {
       message("Running events analysis...")
