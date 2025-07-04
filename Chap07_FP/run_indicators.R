@@ -110,6 +110,11 @@ if (!is.null(opt$ir) || !is.null(opt$mr)) {
   source(here(paste0(chap,"/FP_COMM.R")))
   source(here(paste0(chap,"/FP_Report.R")))
   
+  reports_dir <- file.path(output_path, "reports")
+  if (!dir.exists(reports_dir)) {
+    dir.create(reports_dir, recursive = TRUE)
+  }
+  
   # Ensure all required columns exist in IRdata and MRdata
   req_cols <- read.csv(here( "required_col.csv"), stringsAsFactors = FALSE)
   if (!is.null(opt$ir)) {
@@ -139,13 +144,7 @@ if (!is.null(opt$ir) || !is.null(opt$mr)) {
                           source_filename_mr=NULL,
                           output_dir=opt$`output-dir`)
 
-   
-    reports_dir <- file.path(output_path, "reports")
-    if (!dir.exists(reports_dir)) {
-      dir.create(reports_dir, recursive = TRUE)
-    }
-    
-    CREATE_REPORT(IRdata, reports_dir, opt$ir)
+    CREATE_REPORT(IRdata, reports_dir, opt$ir, FALSE)
   
     # Optional analyses
     if (!opt$`skip-events`) {
@@ -178,6 +177,7 @@ if (!is.null(opt$ir) || !is.null(opt$mr)) {
                           source_filename_ir=NULL,
                           source_filename_mr=opt$mr,
                           output_dir=opt$`output-dir`)
+    CREATE_REPORT(result$MRdata, reports_dir, opt$mr, TRUE)
   }
 } else {
   stop("Either IR or MR data file must be specified using --ir=FILENAME.dta or --mr=FILENAME.dta")

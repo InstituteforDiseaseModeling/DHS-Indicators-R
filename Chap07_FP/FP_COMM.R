@@ -149,7 +149,7 @@ CREATE_FP_COMM <- function(IRdata= NULL, MRdata = NULL){
     # Family planning messages by newspaper and/or magazine 
     MRdata <- MRdata %>%
       mutate(fp_message_mobile = 
-              as.numeric(ifelse(v384d == 1, 1, 0)))%>%
+              as.numeric(ifelse(mv384d == 1, 1, 0)))%>%
       set_value_labels(fp_message_mobile = c(yes = 1, no = 0)) %>%
       set_variable_labels(fp_message_mobile = "Exposure to family planning message by mobile phone")
 

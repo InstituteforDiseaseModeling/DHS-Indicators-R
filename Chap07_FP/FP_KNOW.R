@@ -267,13 +267,14 @@ CREATE_FP_KNOW <- function(IRdata, MRdata) {
       new  <- paste0("mv304_", i)
       if (orig %in% colnames(MRdata) && !(new %in% colnames(MRdata))) {
         colnames(MRdata)[colnames(MRdata) == orig] <- new
+        # message(paste0("renamed", orig, " to ", new))
       }
     }
 
     # Any method 
     MRdata <- MRdata %>%
       mutate(fp_know_any = 
-              as.numeric(ifelse(v301 > 0 & v301 < 8, 1, 0))) %>%
+              as.numeric(ifelse(mv301 > 0 & mv301 < 8, 1, 0))) %>%
       set_value_labels(fp_know_any = c(yes = 1, no = 0)) %>%
       set_variable_labels(fp_know_any = "Know any contraceptive method")
 
@@ -281,7 +282,7 @@ CREATE_FP_KNOW <- function(IRdata, MRdata) {
     # Modern method
     MRdata <- MRdata %>%
       mutate(fp_know_mod = 
-              as.numeric(ifelse(v301 ==3, 1, 0))) %>%
+              as.numeric(ifelse(mv301 ==3, 1, 0))) %>%
       set_value_labels(fp_know_mod = c(yes = 1, no = 0)) %>%
       set_variable_labels(fp_know_mod = "Know any modern method")
 
