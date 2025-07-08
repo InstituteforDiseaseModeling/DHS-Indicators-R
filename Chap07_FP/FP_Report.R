@@ -97,7 +97,7 @@ df_to_html <- function(df, title) {
 }
 
 
-CREATE_REPORT <- function(result_data, output_dir, result_filename, mr=FALSE) {
+CREATE_REPORT <- function(result_data, output_dir, result_filename, mr=FALSE, has_geospatial=FALSE) {
   
   # Set expss package options to show one decimal place
   expss_digits(digits=1)
@@ -189,6 +189,22 @@ CREATE_REPORT <- function(result_data, output_dir, result_filename, mr=FALSE) {
     "</div>\n"
   )
   
+  if (has_geospatial) {
+    html_content <- paste0(html_content,
+      "<div class='summary' style='background-color:#e3f2fd; border-left:5px solid #1976d2;'>",
+      "<strong>Geospatial data is available for this survey and can be linked to cluster locations.</strong>",
+      "</div>\n"
+    )
+  } else {
+    html_content <- paste0(html_content,
+      "<div class='summary' style='background-color:#fff9c4; border-left:5px solid #fbc02d;'>",
+      "<strong>Warning:</strong> No geospatial data is available for this survey in databricks.",
+      "</div>\n"
+    )
+  }
+
+  # ...existing code...
+
   if(mr){
     # Survey set the design with survey weights
     result_data <- result_data %>%
@@ -334,12 +350,54 @@ CREATE_REPORT <- function(result_data, output_dir, result_filename, mr=FALSE) {
                            df_to_html(df2, "Table 2: Knowledge by Age, Women"),
                            df_to_html(df3, "Table 3: Current Use by Age, All Women"),
                            df_to_html(df4, "Table 4: Current Use by Age, Currently Married Women"),
-                           df_to_html(df5, "Table 5: Current Use, Sexually Active, Unmarried Women"),
-                           "</body>\n</html>"
+                           df_to_html(df5, "Table 5: Current Use, Sexually Active, Unmarried Women")
     )
   }
-  
+
+  # Add a horizontally scrollable preview of fp_ columns (first 5 rows) at the end
+  fp_cols <- grep('^fp_', names(result_data), value = TRUE)
+  if (length(fp_cols) > 0) {
+    if (has_geospatial && all(c("ADM1NAME", "URBAN_RURA", "LATNUM", "LONGNUM") %in% names(result_data))) {
+      preview_cols <- c("ADM1NAME", "URBAN_RURA", "LATNUM", "LONGNUM", fp_cols)
+    } else {
+      preview_cols <- fp_cols
+    }
+    preview_df <- head(result_data[, preview_cols, drop = FALSE], 5)
+    # Build HTML table for preview
+    html_preview <- "<div style='overflow-x:auto; margin: 20px 0;'><table style='min-width:1200px; border-collapse:collapse;'>"
+    # Header with row-header class for first column
+    html_preview <- paste0(
+      html_preview, "<thead><tr>",
+      paste0(
+        sapply(seq_along(preview_cols), function(j) {
+          if (j == 1) paste0("<th>", preview_cols[j], "</th>")
+          else paste0("<th>", preview_cols[j], "</th>")
+        }),
+        collapse = ""
+      ),
+      "</tr></thead><tbody>"
+    )
+    # Rows, first column as row-header
+    for (i in 1:nrow(preview_df)) {
+      html_preview <- paste0(
+        html_preview, "<tr>",
+        paste0(
+          sapply(seq_along(preview_cols), function(j) {
+            cell <- ifelse(is.na(preview_df[i, j]), "", as.character(preview_df[i, j]))
+            if (j == 1) paste0("<td class='row-header'>", cell, "</td>")
+            else paste0("<td>", cell, "</td>")
+          }),
+          collapse = ""
+        ),
+        "</tr>"
+      )
+    }
+    html_preview <- paste0(html_preview, "</tbody></table></div>")
+    html_content <- paste0(html_content, "<h3>Preview of Family Planning (fp_) Variables (first 5 rows)</h3>", html_preview)
+  }
+
   # Write HTML file
+  html_content <- paste0(html_content, "</body>\n</html>")
   writeLines(html_content, html_filename)
   cat("HTML report successfully created:", html_filename, "\n")
   cat("Open the file in your web browser to view the interactive tables with horizontal scrolling.\n")

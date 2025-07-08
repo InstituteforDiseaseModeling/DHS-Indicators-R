@@ -31,6 +31,7 @@ Rscript -e "install.packages(c(
   'rmarkdown',
   'sjlabelled',
   'sjmisc',
+  'sf',
   'sparklyr',
   'stringr',
   'yaml',

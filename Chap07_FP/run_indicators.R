@@ -5,8 +5,8 @@
 # Purpose: 			Parameterized entry point for the Family Planning Chapter analysis
 # Data outputs:		coded variables and table output on screen and in excel tables.
 # 
-# Usage:            Rscript run_indicators.R --ir=FILENAME.dta --mr=FILENAME.dta [--skip-events] [--skip-discont] [--output-dir=DIRECTORY]
-# Example:          Rscript run_indicators.R --ir=NGIR7BFL.dta --mr=NGMR7AFL.dta --output-dir=output
+# Usage:            Rscript run_indicators.R --ir=FILENAME.dta --mr=FILENAME.dta [--output-dir=DIRECTORY] [--ge-dir=DIRECTORY]
+# Example:          Rscript run_indicators.R --ir=NGIR7BFL.dta --mr=NGMR7AFL.dta --output-dir=output --ge-dir=geospatial_folder
 # ******************************************************************************
 
 # Load required libraries
@@ -24,9 +24,8 @@ suppressPackageStartupMessages({
 option_list <- list(
   make_option("--ir", type="character", help="IR data file name"),
   make_option("--mr", type="character", help="MR data file name"),
-  make_option("--skip-events", action="store_true", default=TRUE, help="Skip events analysis"),
-  make_option("--skip-discont", action="store_true", default=TRUE, help="Skip discontinuation analysis"),
-  make_option("--output-dir", type="character", default=NULL, help="Output directory for micro data files")
+  make_option("--output-dir", type="character", default=NULL, help="Output directory for micro data files"),
+  make_option("--ge-dir", type="character", default=NULL, help="Directory that contains geospatial data")
 )
 
 opt <- parse_args(OptionParser(option_list=option_list))
@@ -138,25 +137,16 @@ if (!is.null(opt$ir) || !is.null(opt$mr)) {
     message("Processed IRdata for FP_Need...")
     
     source(here(paste0(chap,"/FP_microtables.R")))
-    write_micro_variables(IRdata=IRdata, 
+    has_spatial <- write_micro_variables(IRdata=IRdata, 
                           MRdata=NULL, 
                           source_filename_ir=opt$ir,
                           source_filename_mr=NULL,
-                          output_dir=opt$`output-dir`)
+                          output_dir=opt$`output-dir`,
+                          ge_dir=opt$`ge-dir`)
 
-    CREATE_REPORT(IRdata, reports_dir, opt$ir, FALSE)
+    CREATE_REPORT(IRdata, reports_dir, opt$ir, FALSE, has_spatial)
   
-    # Optional analyses
-    if (!opt$`skip-events`) {
-      message("Running events analysis...")
-      source(here(paste0(chap,"/FP_EVENTS.R")))
-    }
-  
-    if (!opt$`skip-discont`) {
-      message("Running discontinuation analysis...")
-      source(here(paste0(chap,"/FP_DISCONT.R")))
-    }
-  }
+      }
   if (!is.null(opt$mr)) {
     message("Processing MR file: ", opt$mr)
     MRdata <- read_dta(opt$mr)
@@ -172,12 +162,13 @@ if (!is.null(opt$ir) || !is.null(opt$mr)) {
     message("Processed IRdata for FP_KNOW...")
     result <- CREATE_FP_COMM(IRdata=NULL, MRdata=result$MRdata)
     source(here(paste0(chap,"/FP_microtables.R")))
-    write_micro_variables(IRdata=NULL, 
+    has_spatial <- write_micro_variables(IRdata=NULL, 
                           MRdata=result$MRdata, 
                           source_filename_ir=NULL,
                           source_filename_mr=opt$mr,
-                          output_dir=opt$`output-dir`)
-    CREATE_REPORT(result$MRdata, reports_dir, opt$mr, TRUE)
+                          output_dir=opt$`output-dir`,
+                          ge_dir=opt$`ge-dir`)
+    CREATE_REPORT(result$MRdata, reports_dir, opt$mr, TRUE, has_spatial)
   }
 } else {
   stop("Either IR or MR data file must be specified using --ir=FILENAME.dta or --mr=FILENAME.dta")
