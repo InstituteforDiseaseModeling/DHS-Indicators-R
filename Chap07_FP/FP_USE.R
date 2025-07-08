@@ -75,6 +75,7 @@
 
 #' @export
 CREATE_FP_USE <- function(IRdata){
+  box::use(stats[...], labelled[...], dplyr[...])
 
   if (!is.null(IRdata)){
       

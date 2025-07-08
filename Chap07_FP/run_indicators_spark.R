@@ -7,53 +7,34 @@
 #' @param IRdata data.frame for IR data (or NULL)
 #' @param MRdata data.frame for MR data (or NULL)
 #' @return data.frame for either IRdata and MRdata (after processing)
+#' @export
 run_indicators <- function(IRdata = NULL, MRdata = NULL) {
-  box::use(Chap07_FP/CREATE_FP_KNOW)
-  box::use(Chap07_FP/CREATE_FP_COMM)
-  box::use(Chap07_FP/CREATE_FP_USE)
-  box::use(Chap07_FP/CREATE_FP_Need)
+  box::use(Chap07_FP/FP_KNOW)
+  box::use(Chap07_FP/FP_COMM)
+  box::use(Chap07_FP/FP_USE)
+  box::use(Chap07_FP/FP_Need)
 
   chap <- "Chap07_FP"
-  req_cols <- read.csv("required_col.csv", stringsAsFactors = FALSE)
-  ir_cols <- req_cols$col_name[req_cols$survey_type == "ir" & req_cols$chapter=="7"]
-  mr_cols <- req_cols$col_name[req_cols$survey_type == "mr" & req_cols$chapter=="7"]
-  
-  if (!is.null(IRdata)){
-    for (col in ir_cols) {
-      if (!col %in% colnames(IRdata)) {
-        IRdata[[col]] <- NA
-      }
-    }
-  }
-  if (!is.null(MRdata)){
-    for (col in ir_cols) {
-      if (!col %in% colnames(MRdata)) {
-        MRdata[[col]] <- NA
-      }
-    }
-  }
-  
+
   # Run IR analysis scripts
-  result <- CREATE_FP_KNOW(IRdata=IRdata, MRdata=MRdata)
+  result <- FP_KNOW$CREATE_FP_KNOW(IRdata=IRdata, MRdata=MRdata)
   message("Processed IRdata for FP_KNOW...")
-  result <- CREATE_FP_COMM(IRdata=result$IRdata, MRdata=result$MRdata)
+  result <- FP_COMM$CREATE_FP_COMM(IRdata=result$IRdata, MRdata=result$MRdata)
   message("Processed IRdata for FP_COMM...")
-  IRdata <- CREATE_FP_USE(IRdata=result$IRdata)
+  IRdata <- FP_USE$CREATE_FP_USE(IRdata=result$IRdata)
   message("Processed IRdata for FP_USE...")
-  IRdata <- CREATE_FP_Need(IRdata=IRdata)
+  IRdata <- FP_Need$CREATE_FP_Need(IRdata=IRdata)
   message("Processed IRdata for FP_Need...")
 
-  fp_prefix <- all_cols[grepl("fp_", all_cols)]
-  
-  # for spark operations, result must be table format
   if (!is.null(IRdata)){
     message(paste("columns: ", ncol(IRdata)))
-    all_cols <- colnames(IRdata)
-    return(IRdata[, c(fp_prefix, req_cols)])
+    return(IRdata)
+    #all_cols <- colnames(IRdata)
+    #return(IRdata[, c(fp_prefix, req_cols)])
   } else if (!is.null(MRdata)){
     message(paste("columns: ", ncol(MRdata)))
-    all_cols <- colnames(MRdata)
-    return(MRdata[, c(fp_prefix, req_cols)])
+    return(MRdata)
+    #all_cols <- colnames(MRdata)
+    #return(MRdata[, c(fp_prefix, req_cols)])
   }
-  
 }

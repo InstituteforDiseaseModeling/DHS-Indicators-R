@@ -23,15 +23,6 @@
 # fp_future_use   "Intention of use of contraception in the future among non-users"
 # -----------------------------------------------------------------------------
 
-# libraries needed
-library(tidyverse)
-library(haven)
-library(labelled)
-library(sjlabelled)
-library(sjmisc)
-#library(janitor)
-#library(survey)  #to create survey design weights
-
 # datapath <- "C:/Users/21180/OneDrive - ICF/Data/DHS_Stata"
 # irdata <- "UGIR7BFL"
 # srvy <- substr(irdata,1,6)
@@ -41,6 +32,17 @@ library(sjmisc)
 
 #' @export
 CREATE_FP_NEED <- function(IRdata){
+  box::use(utils[...], stats[...], sjlabelled[...], sjmisc[...], labelled[...], dplyr[...])
+
+  # libraries needed
+  #library(dplyr)
+  #library(tidyverse)
+  #library(haven)
+  #library(labelled)
+  #library(sjlabelled)
+  #library(sjmisc)
+  #library(janitor)
+  #library(survey)  #to create survey design weights
   
   if (!is.null(IRdata)){
     v626a_included <- (hasName(IRdata,"v626a") & sum(is.na(IRdata$v626a)) == 0)

@@ -42,8 +42,9 @@
 ## KNOWLEDGE OF FAMILY PLANNING METHODS
 #' @export
 CREATE_FP_KNOW <- function(IRdata, MRdata){
-  ## indicators from IR file
+  box::use(stats[...], labelled[...], dplyr[...])
 
+  ## indicators from IR file
 
   # Check if the object exists
   if (!is.null(IRdata)) {
@@ -221,7 +222,6 @@ CREATE_FP_KNOW <- function(IRdata, MRdata){
     fp_know_mean_all <- weighted.mean(IRdata$fp_know_sum, IRdata$wt)
     var_label(fp_know_mean_all) <- "Mean number of methods known - all"
     
-    
     # Mean methods known among married
     if ("v502" %in% colnames(IRdata)){
     fp_know_mean_mar <- IRdata %>%
@@ -231,7 +231,7 @@ CREATE_FP_KNOW <- function(IRdata, MRdata){
     
     var_label(fp_know_mean_mar) <- "Mean number of methods known - currently married"
     }
-    
+
     # Mean methods known sexually active, unmarried (SAUW)
     if (all(c("v502", "v528") %in% colnames(IRdata))){
       fp_know_mean_sauw <- IRdata %>%
@@ -240,7 +240,6 @@ CREATE_FP_KNOW <- function(IRdata, MRdata){
         pull(fp_know_mean_sauw)
       var_label(fp_know_mean_sauw) <- "Mean number of methods known - currently married"
     }
-    
     
     ## Knowledge of fertile period
     IRdata <- IRdata %>%

@@ -3,6 +3,7 @@
 
 Rscript -e "install.packages(c(
   'AzureStor',
+  'box',
   'DBI',
   'dplyr',
   'expss',

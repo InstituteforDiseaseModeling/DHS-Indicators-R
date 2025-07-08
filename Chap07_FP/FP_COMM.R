@@ -27,17 +27,13 @@
 # fp_any_notdiscuss		"Women non-users who did not discuss FP neither with FP worker or in a health facility"
 # ------------------------------------------------------------------------------
   
-
-# Load necessary libraries
-library(dplyr)
-library(labelled)
-
 ## FAMILY PLANNING MESSAGES
 
 # Family planning messages by radio 
 #' @export
 CREATE_FP_COMM <- function(IRdata, MRdata) {
-    
+  box::use(stats[...], labelled[...], dplyr[...])
+
   # Process IR data
   if (!is.null(IRdata)) {
     IRdata <- IRdata %>%
