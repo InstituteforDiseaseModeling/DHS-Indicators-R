@@ -1,6 +1,15 @@
 #!/bin/sh
 # install_packages.sh - Install all R packages listed in renv.lock
 
+#  ensures GDAL, PROJ, GEOS, UDUNITS2 are available for sf package
+sudo apt-get update
+sudo apt-get install -y \
+  gdal-bin libgdal-dev \
+  libproj-dev libgeos-dev libudunits2-dev \
+  build-essential python3-dev \
+  libssl-dev mysql-client libmysqlclient-dev \
+  libsqlite3-dev
+  
 Rscript -e "install.packages(c(
   'AzureStor',
   'DBI',
