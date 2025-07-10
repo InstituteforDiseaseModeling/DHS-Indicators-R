@@ -1,5 +1,14 @@
+#' Reads recode data into a Spark DataFrame
+#'
+#' @param sc The SparkContext to use for Spark operations
+#' @param type A string containing the type of recode data to read (e.g. ir, mr)
+#' @param phase A string containing the DHS phase from which to read
+#' @param cols A list of strings containing the columns to read
+#' @param countries An optional list of strings containing the countries to read
+#' @param versions An optional list of strings containing the versions to read
+#' @return A Spark DataFrame containing the resulting recode data
 #' @export
-read_recode <- function(sc, type, phase, cols, countries = NULL) {
+read_recode <- function(sc, type, phase, cols, countries = NULL, versions = NULL) {
   box::use(dplyr[...], sparklyr[...])
   query = paste0("SELECT _cc,_vv,", paste0(cols, collapse=","),  " FROM dhs.", phase, "_recode.", type)
   recode_tbl <- tbl(sc, sql(query))
@@ -8,9 +17,19 @@ read_recode <- function(sc, type, phase, cols, countries = NULL) {
     recode_tbl <- recode_tbl %>% filter(`_cc` %in% countries)
   }
 
+  if (!is.null(versions)) {
+    recode_tbl <- recode_tbl %>% filter(`_vv` %in% versions)
+  }
+
   return(recode_tbl)
 }
 
+#' Reads indicator data into a Spark DataFrame
+#'
+#' @param sc The SparkContext to use for Spark operations
+#' @param chapter A string containing the DHS chapter from which to read
+#' @param countries An optional list of strings containing the countries to read
+#' @return A Spark DataFrame containing the resulting indicator data
 #' @export
 read_indicator <- function(sc, chapter, countries = NULL) {
   box::use(dplyr[...], sparklyr[...])
@@ -23,6 +42,16 @@ read_indicator <- function(sc, chapter, countries = NULL) {
   return(indicator_tbl)
 }
 
+#' Reads recode metadata 
+#'
+#' This function requires both a country and version to be specified as the metadata
+#' can vary across surveys even within the same DHS phase and country.
+#'
+#' @param sc The SparkContext to use for Spark operations
+#' @param type A string containing the type of recode data to read (e.g. ir, mr)
+#' @param country A string containing the country for which to read metadata
+#' @param version A string containing the version for which to read metadata
+#' @return A Spark DataFrame containing the resulting recode metadata
 #' @export
 read_recode_metadata <- function(sc, type, country, version) {
   box::use(dplyr[...], sparklyr[...])
@@ -36,6 +65,11 @@ read_recode_metadata <- function(sc, type, country, version) {
   return(metadata_tbl)
 }
 
+#' Reads indicator metadata 
+#'
+#' @param sc The SparkContext to use for Spark operations
+#' @param chapter A string containing the DHS chapter for which to read metadata
+#' @return A Spark DataFrame containing the resulting indicator metadata
 #' @export
 read_indicator_metadata <- function(sc, chapter) {
   box::use(dplyr[...], sparklyr[...])
@@ -48,6 +82,11 @@ read_indicator_metadata <- function(sc, chapter) {
   return(metadata_tbl)
 }
 
+#' Write indicator metadata 
+#'
+#' @param sc The SparkContext to use for Spark operations
+#' @param chapter A string containing the DHS chapter for which to write metadata
+#' @param metadata A dataframe containing the metadata
 #' @export
 write_metadata <- function(sc, chapter, metadata) {
   box::use(dplyr[...], sparklyr[...], DBI)
@@ -74,6 +113,11 @@ write_metadata <- function(sc, chapter, metadata) {
   )
 }
 
+#' Write indicator data 
+#'
+#' @param sc The SparkContext to use for Spark operations
+#' @param chapter A string containing the DHS chapter for which to write data
+#' @param indicators A dataframe containing the indicator data
 #' @export
 write_indicators <- function(sc, chapter, indicators) {
   box::use(dplyr[...], sparklyr[...], labelled)
