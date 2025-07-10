@@ -40,11 +40,13 @@ build_metadata <- function(data) {
 apply_metadata <- function(data, metadata) {
   box::use(stats[...], tidyr[...], dplyr[...], jsonlite, labelled)
 
-  var_labels <- metadata %>% 
-    select(variable, variable_label) %>%
-    pivot_wider(names_from = "variable", values_from = "variable_label")
-  
+  var_labels <- metadata %>%
+    filter(variable %in% colnames(data)) %>%
+    select(variable, variable_label)
+  var_labels <- setNames(as.list(var_labels$variable_label), var_labels$variable)
+
   val_labels <- metadata %>%
+    filter(variable %in% colnames(data)) %>%
     select(variable, value_label) %>%
     mutate(value_label = mapply(function (x) {
       x <- jsonlite::fromJSON(x)
