@@ -8,6 +8,6 @@ run <- function(sc, chapter, phase = NULL, countries = NULL) {
 
   metadata <- metadata$build_metadata(indicators)
 
-  io$write_metadata(sc, chapter, metadata)
-  io$write_indicators(sc, chapter, indicators)
+  io$write_metadata(sc, chapter$get_config()$chapter, metadata)
+  io$write_indicators(sc, chapter$get_config()$chapter, indicators)
 }

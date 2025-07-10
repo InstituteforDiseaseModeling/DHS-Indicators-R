@@ -7,7 +7,6 @@ get_config <- function () {
 
 #' @export
 load_data <- function(sc, phase = NULL, countries = NULL) {
-  options('box.path'='/Workspace/Users/joe.wang@gatesfoundation.org/DHS-Indicators-R')
   box::use(dplyr[...], sparklyr[...], etl/io)
   # TODO: support additional phases
   phase <- "7"
@@ -176,10 +175,10 @@ run <- function(data) {
 process <- function(data) {
   box::use(dplyr[...])
 
-  IRdata <- select(data$IRdata, c(`_cc`, `_vv`, `_pk` = caseid, caseid, starts_with("fp_")))
-  IRdata <- mutate(IRdata, `_recode_type` = "IR")
-  MRdata <- select(data$MRdata, c(`_cc`, `_vv`, `_pk` = mcaseid, mcaseid, starts_with("fp_")))
-  MRdata <- mutate(MRdata, `_recode_type` = "MR")
+  IRdata <- select(data$IRdata, c(`_cc`, `_vv`, caseid, starts_with("fp_")))
+  IRdata <- mutate(IRdata, `_pk` = caseid, `_recode_type` = "IR")
+  MRdata <- select(data$MRdata, c(`_cc`, `_vv`, mcaseid, starts_with("fp_")))
+  MRdata <- mutate(MRdata, `_pk` = mcaseid, `_recode_type` = "MR")
 
   return(bind_rows(list(IRdata, MRdata)))
 }
@@ -203,7 +202,7 @@ run_indicators <- function(IRdata, MRdata) {
   if (!is.null(IRdata)) {
     return(IRdata)
   }
-  if (!is.null(MRdata)) {
-    return(MRdata)
+  if (!is.null(result$MRdata)) {
+    return(result$MRdata)
   }
 }
