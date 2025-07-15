@@ -133,6 +133,7 @@ load_data <- function(sc, phase = NULL, countries = NULL) {
     "mv003",
     "mv004",
     "mv005",
+    "mv007",
     "mv301",
     "mv304_01",
     "mv304_02",

@@ -12,6 +12,7 @@ Rscript -e "install.packages(c(
   'haven',
   'here',
   'jsonlite',
+  'kableExtra',
   'knitr',
   'labelled',
   'lubridate',
