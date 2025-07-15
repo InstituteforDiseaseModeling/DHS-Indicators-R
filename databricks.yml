@@ -1,0 +1,19 @@
+# This is a Databricks asset bundle definition for DHS-Indicators-R.
+# The Databricks extension requires databricks.yml configuration file.
+# See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
+
+bundle:
+  name: DHS-Indicators-R
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://adb-312788264243632.12.azuredatabricks.net
+
+  ## Optionally, there could be 'staging' or 'prod' targets here.
+  #
+  # prod:
+  #   workspace:
+  #     host: https://adb-312788264243632.12.azuredatabricks.net
