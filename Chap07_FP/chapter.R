@@ -161,7 +161,10 @@ load_data <- function(sc, phase = NULL, countries = NULL) {
   )
 
   mr_tbl <- io$read_recode(sc, "mr", phase, mr_cols, countries)
-  return(list(IRdata=collect(ir_tbl), MRdata=collect(mr_tbl)))
+
+  ge_tbl <- io$read_ge(sc, phase, countries)
+
+  return(list(IRdata=collect(ir_tbl), MRdata=collect(mr_tbl), GEdata=collect(ge_tbl)))
 }
 
 #' @export
@@ -169,17 +172,22 @@ run <- function(data) {
   IRdata <- run_indicators(data$IRdata, NULL)
   MRdata <- run_indicators(NULL, data$MRdata)
 
-  return(list(IRdata=IRdata, MRdata=MRdata))
+  return(list(IRdata=IRdata, MRdata=MRdata, GEdata=data$GEdata))
 }
 
 #' @export
 process <- function(data) {
-  box::use(dplyr[...])
+  box::use(dplyr[...], etl/gis)
 
-  IRdata <- select(data$IRdata, c(`_cc`, `_vv`, caseid, starts_with("fp_")))
-  IRdata <- mutate(IRdata, `_pk` = caseid, `_recode_type` = "IR")
-  MRdata <- select(data$MRdata, c(`_cc`, `_vv`, mcaseid, starts_with("fp_")))
-  MRdata <- mutate(MRdata, `_pk` = mcaseid, `_recode_type` = "MR")
+  IRdata <- data$IRdata %>%
+    select(c(`_cc`, `_vv`, caseid, starts_with("fp_"), DHSCLUST = v001)) %>%
+    mutate(`_pk` = caseid, `_recode_type` = "IR")
+  IRdata <- gis$join_ge_data(IRdata, data$GEdata)
+
+  MRdata <- data$MRdata %>%
+    select(c(`_cc`, `_vv`, mcaseid, starts_with("fp_"), DHSCLUST = mv001)) %>%
+    mutate(`_pk` = mcaseid, `_recode_type` = "MR")
+  MRdata <- gis$join_ge_data(MRdata, data$GEdata)
 
   return(bind_rows(list(IRdata, MRdata)))
 }
