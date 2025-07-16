@@ -13,7 +13,7 @@ source(here("utils/write_micro.R"))
 write_micro_variables <- function(IRdata, MRdata, source_filename_ir, source_filename_mr, output_dir, ge_dir=NULL) {
   # Process and export IRdata if it exists
   
-  box::use(haven[...], labelled[...], expss[...])
+  box::use(haven[...], labelled[...], sjlabelled[...], expss[...])
   if (!is.null(IRdata)) {
     message("Processing IRdata for micro export...")
     
