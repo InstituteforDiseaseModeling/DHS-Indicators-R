@@ -42,6 +42,30 @@ read_indicator <- function(sc, chapter, countries = NULL) {
   return(indicator_tbl)
 }
 
+#' Reads geographic data into a Spark DataFrame
+#'
+#' @param sc The SparkContext to use for Spark operations
+#' @param phase A string containing the DHS phase from which to read
+#' @param countries An optional list of strings containing the countries to read
+#' @param versions An optional list of strings containing the versions to read
+#' @return A Spark DataFrame containing the resulting geographic data
+#' @export
+read_ge <- function(sc, phase, countries = NULL, versions = NULL) {
+  box::use(dplyr[...], sparklyr[...])
+  query = paste0("SELECT * FROM dhs.", phase, "_gis.ge")
+  ge_tbl <- tbl(sc, sql(query))
+
+  if (!is.null(countries)) {
+    ge_tbl <- ge_tbl %>% filter(`_cc` %in% countries)
+  }
+
+  if (!is.null(versions)) {
+    ge_tbl <- ge_tbl %>% filter(`_vv` %in% versions)
+  }
+
+  return(ge_tbl)
+}
+
 #' Reads recode metadata 
 #'
 #' This function requires both a country and version to be specified as the metadata
