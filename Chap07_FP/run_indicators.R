@@ -137,14 +137,14 @@ if (!is.null(opt$ir) || !is.null(opt$mr)) {
     message("Processed IRdata for FP_Need...")
     
     source(here(paste0(chap,"/FP_microtables.R")))
-    has_spatial <- write_micro_variables(IRdata=IRdata, 
+    final_result <- write_micro_variables(IRdata=IRdata, 
                           MRdata=NULL, 
                           source_filename_ir=opt$ir,
                           source_filename_mr=NULL,
                           output_dir=opt$`output-dir`,
                           ge_dir=opt$`ge-dir`)
 
-    CREATE_REPORT(IRdata, reports_dir, opt$ir, FALSE, has_spatial)
+    CREATE_REPORT(final_result$data, reports_dir, opt$ir, FALSE, final_result$has_spatial)
   
       }
   if (!is.null(opt$mr)) {
@@ -162,13 +162,13 @@ if (!is.null(opt$ir) || !is.null(opt$mr)) {
     message("Processed IRdata for FP_KNOW...")
     result <- CREATE_FP_COMM(IRdata=NULL, MRdata=result$MRdata)
     source(here(paste0(chap,"/FP_microtables.R")))
-    has_spatial <- write_micro_variables(IRdata=NULL, 
+    final_result <- write_micro_variables(IRdata=NULL, 
                           MRdata=result$MRdata, 
                           source_filename_ir=NULL,
                           source_filename_mr=opt$mr,
                           output_dir=opt$`output-dir`,
                           ge_dir=opt$`ge-dir`)
-    CREATE_REPORT(result$MRdata, reports_dir, opt$mr, TRUE, has_spatial)
+    CREATE_REPORT(final_result$data, reports_dir, opt$mr, TRUE, final_result$has_spatial)
   }
 } else {
   stop("Either IR or MR data file must be specified using --ir=FILENAME.dta or --mr=FILENAME.dta")

@@ -321,7 +321,7 @@ CREATE_REPORT <- function(result_data, output_dir, result_filename, mr=FALSE, ha
         weight = wt,
         ) %>% 
       set_caption("Current use by number of living children, sexually active, unmarried women")
-    browser()
+   
     df1 <- filter_rows(table1)
     df2 <- filter_cols(table2)
     df3 <- filter_cols(table3)

@@ -68,6 +68,6 @@ write_dta_micro <- function(data, input_filename, ge_dir, output_dir = NULL, cha
   message("exporting data with ", ncol(data), " variables and ", nrow(data), " observations")
   haven::write_dta(data, output_path, version = dta_version)
   message("Successfully exported data with ", ncol(data), " variables and ", nrow(data), " observations")
-
-  return(has_spatial)
+  message(paste0("Geospatial data available: ", has_spatial))
+  return(list(has_spatial=has_spatial, data=data))
 }

@@ -40,9 +40,9 @@ write_micro_variables <- function(IRdata, MRdata, source_filename_ir, source_fil
       fp_sauw = set_label(fp_sauw, label = "sexually active, unmarried women"))
     
     # Use the utility function to write/append IR data
-    has_spatial <- write_dta_micro(IRdata, source_filename_ir, ge_dir, output_dir, chapter_tag = "Chap07_FP")
+    result <- write_dta_micro(IRdata, source_filename_ir, ge_dir, output_dir, chapter_tag = "Chap07_FP")
     message("IR data export complete!") 
-    return (has_spatial)
+    return (result)
   }
   
   # Process and export MRdata if it exists
@@ -62,8 +62,8 @@ write_micro_variables <- function(IRdata, MRdata, source_filename_ir, source_fil
       fp_married = set_label(fp_married, label = "currently married men"))
     
     # Use the utility function to write/append MR data
-    has_spatial <- write_dta_micro(MRdata, source_filename_mr, ge_dir, output_dir, chapter_tag = "Chap07_FP")
+    result <- write_dta_micro(MRdata, source_filename_mr, ge_dir, output_dir, chapter_tag = "Chap07_FP")
     message("MR data export complete!") 
-    return (has_spatial)
+    return (result)
   }
 }
