@@ -7,11 +7,13 @@
 join_ge_data <- function(data, ge_data, cluster_col) {
   box::use(dplyr[...], sparklyr[...], etl/io)
 
-  data <- data %>%
-    left_join(
-      select(ge_data, c("DHSCLUST", "LATNUM", "LONGNUM", "ADM1NAME", "URBAN_RURA", "_cc", "_vv")),
-      by = c("DHSCLUST", "_cc", "_vv")
-    )
-
+  if (nrow(ge_data) > 0) {
+    data <- data %>%
+      left_join(
+        select(ge_data, c("DHSCLUST", "LATNUM", "LONGNUM", "ADM1NAME", "URBAN_RURA", "_cc", "_vv")),
+        by = c("DHSCLUST", "_cc", "_vv")
+      )
+  }
+  
   return (data)
 }

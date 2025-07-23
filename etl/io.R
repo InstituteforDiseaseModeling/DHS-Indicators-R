@@ -29,14 +29,19 @@ read_recode <- function(sc, type, phase, cols, countries = NULL, versions = NULL
 #' @param sc The SparkContext to use for Spark operations
 #' @param chapter A string containing the DHS chapter from which to read
 #' @param countries An optional list of strings containing the countries to read
+#' @param versions An optional list of strings containing the versions to read
 #' @return A Spark DataFrame containing the resulting indicator data
 #' @export
-read_indicator <- function(sc, chapter, countries = NULL) {
+read_indicator <- function(sc, chapter, countries = NULL, versions = NULL) {
   box::use(dplyr[...], sparklyr[...])
   indicator_tbl <- tbl(sc, sql(paste0("SELECT * FROM dhs.indicator.chapter_", chapter)))
 
   if (!is.null(countries)) {
     indicator_tbl <- indicator_tbl %>% filter(`_cc` %in% countries)
+  }
+
+  if (!is.null(versions)) {
+    indicator_tbl <- indicator_tbl %>% filter(`_vv` %in% versions)
   }
 
   return(indicator_tbl)
@@ -146,11 +151,12 @@ write_metadata <- function(sc, chapter, metadata) {
 write_indicators <- function(sc, chapter, indicators) {
   box::use(dplyr[...], sparklyr[...], labelled)
 
-  indicators <- labelled::remove_labels(indicators)
+  # Assume "logical" datatypes are columns with all NA's.
+  indicators <- labelled::remove_labels(indicators) %>% 
+    mutate_if(is.logical, as.numeric)
 
-  tbl_indicators <- copy_to(sc, indicators, "_new_indicators", overwrite = TRUE, memory = FALSE, repartition = 10L)
   target <- paste0("dhs.indicator.chapter_", chapter)
-
+  
   DBI::dbGetQuery(sc, paste0(
     "CREATE TABLE IF NOT EXISTS ", target, " (",
     "_pk STRING, ",
@@ -159,6 +165,25 @@ write_indicators <- function(sc, chapter, indicators) {
     "_vv STRING",
     ")"
   ))
+
+  # sparklyr copy_to currently does not batch records for serialization, so we need
+  # to implement this ourselves.
+  batch_size <- 50000
+  batch_dfs <- list()
+
+  i <- 0
+  rows <- nrow(indicators)
+  while(i * batch_size < rows) {
+    message(paste0("Copying batch "), i+1)
+
+    df <- slice(indicators, (i * batch_size + 1):min(rows, (i+1) * batch_size))
+    batch_dfs[[i+1]] <- copy_to(sc, df, paste0("_indicator_batch_", i), overwrite = TRUE, memory = FALSE)
+
+    i <- i + 1
+  }
+
+  tbl_indicators <- sdf_bind_rows(batch_dfs)
+  sdf_register(tbl_indicators, "_new_indicators")
 
   DBI::dbGetQuery(sc, paste0(
     "MERGE WITH SCHEMA EVOLUTION INTO ", target, " ",
@@ -170,4 +195,16 @@ write_indicators <- function(sc, chapter, indicators) {
     "WHEN MATCHED THEN UPDATE SET * ",
     "WHEN NOT MATCHED THEN INSERT *"
   ))
+}
+
+#' Arrow batched version of the dplyr collect
+#'
+#' @export
+batch_collect <- function(tbl, ...) {
+  box::use(dplyr[...], sparklyr)
+  collected <- list()
+  sparklyr:::arrow_collect(tbl, ..., callback = function(batch_df) {
+    collected <<- append(collected, list(batch_df))
+  })
+  return(as_tibble(bind_rows(collected)))
 }

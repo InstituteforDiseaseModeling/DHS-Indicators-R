@@ -164,13 +164,13 @@ load_data <- function(sc, phase = NULL, countries = NULL) {
 
   ge_tbl <- io$read_ge(sc, phase, countries)
 
-  return(list(IRdata=collect(ir_tbl), MRdata=collect(mr_tbl), GEdata=collect(ge_tbl)))
+  return(list(IRdata=io$batch_collect(ir_tbl), MRdata=io$batch_collect(mr_tbl), GEdata=io$batch_collect(ge_tbl)))
 }
 
 #' @export
 run <- function(data) {
-  IRdata <- run_indicators(data$IRdata, NULL)
-  MRdata <- run_indicators(NULL, data$MRdata)
+  IRdata <- if(nrow(data$IRdata) > 0) run_indicators(data$IRdata, NULL) else data.frame()
+  MRdata <- if(nrow(data$MRdata) > 0) run_indicators(NULL, data$MRdata) else data.frame()
 
   return(list(IRdata=IRdata, MRdata=MRdata, GEdata=data$GEdata))
 }
@@ -179,15 +179,22 @@ run <- function(data) {
 process <- function(data) {
   box::use(dplyr[...], etl/gis)
 
-  IRdata <- data$IRdata %>%
-    select(c(`_cc`, `_vv`, caseid, starts_with("fp_"), DHSCLUST = v001)) %>%
-    mutate(`_pk` = caseid, `_recode_type` = "IR")
-  IRdata <- gis$join_ge_data(IRdata, data$GEdata)
+  IRdata <- data$IRdata
+  MRdata <- data$MRdata
 
-  MRdata <- data$MRdata %>%
-    select(c(`_cc`, `_vv`, mcaseid, starts_with("fp_"), DHSCLUST = mv001)) %>%
-    mutate(`_pk` = mcaseid, `_recode_type` = "MR")
-  MRdata <- gis$join_ge_data(MRdata, data$GEdata)
+  if(nrow(IRdata) > 0) {
+    IRdata <- IRdata %>%
+      select(c(`_cc`, `_vv`, caseid, starts_with("fp_"), DHSCLUST = v001)) %>%
+      mutate(`_pk` = caseid, `_recode_type` = "IR")
+    IRdata <- gis$join_ge_data(IRdata, data$GEdata)
+  }
+
+  if(nrow(MRdata) > 0) {
+    MRdata <- data$MRdata %>%
+      select(c(`_cc`, `_vv`, mcaseid, starts_with("fp_"), DHSCLUST = mv001)) %>%
+      mutate(`_pk` = mcaseid, `_recode_type` = "MR")
+    MRdata <- gis$join_ge_data(MRdata, data$GEdata)
+  }
 
   return(bind_rows(list(IRdata, MRdata)))
 }
